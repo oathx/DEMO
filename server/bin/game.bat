@@ -1,0 +1,1 @@
+luajit ./lua/game/main.lua ./lua/game/serconf.lua game/requires

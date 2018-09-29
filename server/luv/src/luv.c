@@ -54,10 +54,8 @@ static const luaL_Reg luv_functions[] = {
   // cmsgpack.c
   {"pack", mp_pack},
   {"unpack", mp_unpack},
-  {"unpack_one", mp_unpack_one},
-  {"unpack_limit", mp_unpack_limit},
-
-  { "hash_string", luv_hash_string },
+ 
+  {"hash_string", luv_hash_string },
   {"sha1", lsha1},
 
   // handle.c

@@ -1,0 +1,6 @@
+require("component/h5entity")
+require("component/h5component")
+require("component/h5connect")
+require("component/h5connectmanager")
+require("component/h5server")
+require("component/h5session")

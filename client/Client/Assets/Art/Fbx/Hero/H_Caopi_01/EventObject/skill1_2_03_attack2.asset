@@ -1,0 +1,57 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e1f511a9493b55458b69086ce6a1797, type: 3}
+  m_Name: skill1_2_03_attack2
+  m_EditorClassIdentifier: 
+  bone: 18
+  position: {x: -0.22628056, y: 1.1407756, z: 1.1636319}
+  rotation: {x: 0.4898622, y: 0.5070153, z: 0.5067269, w: -0.49618393}
+  range: 1
+  rangeMonster: 2.5
+  rangeMonsterVector4: {x: 2, y: 4, z: 6, w: 6}
+  blur: 0
+  blurDist: 0.1
+  blurStrength: 3.5
+  blurFrame: 3
+  hitReact:
+    cameraShake: 0
+    hitAudio: {fileID: 0}
+    canBlock: 1
+    blockFreeze: 0
+    blockFreezeSelf: 0
+    hitReactAni: 3
+    hitEffects:
+    - {fileID: 11400000, guid: 203f3c11a9a91c441bb64fdcccb284cd, type: 2}
+    dynamicLightInstance: {fileID: 11498434, guid: 64e13920439b8a145b69ca59b061e138,
+      type: 2}
+    freeze: 0
+    freezeSelf: 0
+    hookEnable: 0
+    monsterCameraShake: 0
+    canBlockMonster: 0
+    hitReactAniMonster: 18
+    hitEffectsMonster:
+    - {fileID: 11400000, guid: 203f3c11a9a91c441bb64fdcccb284cd, type: 2}
+    freezeMonster: 0
+    freezeMonsterSelf: 0
+  checkType: 0
+  attackSfx: {fileID: 0}
+  attackSfxProp:
+    gravity: 0
+    time: 2
+    speed: 0
+    traceSpeed: 0
+    follow: 0
+    bulletType: 0
+    attackInterval: 0
+    damageTotal: 1
+    damageInterval: 0.1
+    through: 0

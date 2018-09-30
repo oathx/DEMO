@@ -1,0 +1,170 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d030bf663bd9d81499943c4eb84ea04c, type: 3}
+  m_Name: rsm_camskill1_1_AdjustmentColorAdd
+  m_EditorClassIdentifier: 
+  IsControlPartly: 1
+  NoPartlyColorCuve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  RCuve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - time: 0.14452855
+      value: 0.00037512483
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - time: 0.2048896
+      value: 0.036196496
+      inSlope: 1.8349195
+      outSlope: 1.8349195
+      tangentMode: 0
+    - time: 0.316575
+      value: 0.2
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - time: 0.3413627
+      value: 0.2
+      inSlope: 0.00022351742
+      outSlope: 0.00022351742
+      tangentMode: 0
+    - time: 0.40605643
+      value: 0.075
+      inSlope: 0.00029802322
+      outSlope: 0.00029802322
+      tangentMode: 0
+    - time: 0.49059057
+      value: 0.075
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - time: 0.54912406
+      value: 0.15
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - time: 0.64831793
+      value: 0.15
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - time: 0.7942022
+      value: 0.030940125
+      inSlope: -0.63667136
+      outSlope: -0.63667136
+      tangentMode: 0
+    - time: 0.90158284
+      value: -0.0007433789
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  GCuve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 10
+    - time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 10
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  BCuve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - time: 0.14452855
+      value: 0.00037512483
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - time: 0.316575
+      value: 0.04
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - time: 0.3413627
+      value: 0.04
+      inSlope: 0.00022351742
+      outSlope: 0.00022351742
+      tangentMode: 0
+    - time: 0.40605643
+      value: 0.01
+      inSlope: 0.00029802322
+      outSlope: 0.00029802322
+      tangentMode: 0
+    - time: 0.49059057
+      value: 0.01
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - time: 0.54912406
+      value: 0.03
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - time: 0.64831793
+      value: 0.03
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - time: 0.90158284
+      value: -0.0007433789
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  IsLerp: 0
+  Vec: {x: 0, y: 0, z: 0}

@@ -1,0 +1,58 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e1f511a9493b55458b69086ce6a1797, type: 3}
+  m_Name: struggleattack
+  m_EditorClassIdentifier: 
+  bone: 18
+  position: {x: -0.06553334, y: 0.97042644, z: 0.39275837}
+  rotation: {x: 0.006341546, y: -0.7167609, z: -0.00691518, w: 0.697256}
+  range: 2
+  rangeMonster: 2.8
+  rangeMonsterVector4: {x: 2.3, y: 0.2, z: 6, w: 6}
+  blur: 0
+  blurDist: 0.2
+  blurStrength: 3.5
+  blurFrame: 3
+  hitReact:
+    cameraShake: 0
+    hitAudio: {fileID: 123372, guid: 5bd118c68dff4a3468665092d59577ca, type: 2}
+    canBlock: 1
+    blockFreeze: 2
+    blockFreezeSelf: 2
+    hitReactAni: 9
+    hitEffects:
+    - {fileID: 11400000, guid: 203f3c11a9a91c441bb64fdcccb284cd, type: 2}
+    dynamicLightInstance: {fileID: 11498434, guid: 64e13920439b8a145b69ca59b061e138,
+      type: 2}
+    freeze: 2
+    freezeSelf: 2
+    hookEnable: 0
+    monAtkEnable: 0
+    monsterCameraShake: 0
+    canBlockMonster: 1
+    hitReactAniMonster: 14
+    hitEffectsMonster:
+    - {fileID: 11400000, guid: 203f3c11a9a91c441bb64fdcccb284cd, type: 2}
+    freezeMonster: 1
+    freezeMonsterSelf: 1
+  checkType: 0
+  attackSfx: {fileID: 0}
+  attackSfxProp:
+    gravity: 0
+    time: 2
+    speed: 0
+    traceSpeed: 0
+    follow: 0
+    bulletType: 0
+    attackInterval: 0
+    damageTotal: 1
+    damageInterval: 0.1
+    through: 0

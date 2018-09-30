@@ -1,0 +1,59 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e1f511a9493b55458b69086ce6a1797, type: 3}
+  m_Name: talent_attack_attack4
+  m_EditorClassIdentifier: 
+  bone: 17
+  position: {x: 0.17378017, y: 0.97839534, z: 0.6548392}
+  rotation: {x: 0.03541284, y: 0.7193436, z: 0.03061533, w: -0.6930754}
+  range: 1.2
+  rangeMonster: 2.5
+  rangeMonsterVector4: {x: 2, y: 2, z: 2, w: 2}
+  blur: 1
+  blurDist: 0.1
+  blurStrength: 3.5
+  blurFrame: 3
+  hitReact:
+    cameraShake: 2
+    hitAudio: {fileID: 105294, guid: a0b0450340c74a949b064362ca817d2b, type: 2}
+    canBlock: 1
+    blockFreeze: 3
+    blockFreezeSelf: 3
+    hitReactAni: 4
+    hitEffects:
+    - {fileID: 11400000, guid: 203f3c11a9a91c441bb64fdcccb284cd, type: 2}
+    dynamicLightInstance: {fileID: 11498434, guid: 64e13920439b8a145b69ca59b061e138,
+      type: 2}
+    freeze: 8
+    freezeSelf: 8
+    hookEnable: 0
+    monAtkEnable: 1
+    isLastAttack: 1
+    monsterCameraShake: 3
+    canBlockMonster: 1
+    hitReactAniMonster: 4
+    hitEffectsMonster:
+    - {fileID: 11400000, guid: 203f3c11a9a91c441bb64fdcccb284cd, type: 2}
+    freezeMonster: 3
+    freezeMonsterSelf: 3
+  checkType: 0
+  attackSfx: {fileID: 0}
+  attackSfxProp:
+    gravity: 0
+    time: 2
+    speed: 0
+    traceSpeed: 0
+    follow: 0
+    bulletType: 0
+    attackInterval: 0
+    damageTotal: 1
+    damageInterval: 0.1
+    through: 0

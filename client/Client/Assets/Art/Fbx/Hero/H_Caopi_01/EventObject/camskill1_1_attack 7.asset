@@ -1,0 +1,54 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e1f511a9493b55458b69086ce6a1797, type: 3}
+  m_Name: camskill1_1_attack 7
+  m_EditorClassIdentifier: 
+  bone: 18
+  position: {x: 0, y: 0, z: 0}
+  rotation: {x: -0.000000029802319, y: 0.00000005960463, z: 0.000000029802319, w: 1}
+  range: 0
+  rangeMonster: 2.5
+  rangeMonsterVector4: {x: 2, y: 0.5, z: 6, w: 6}
+  blur: 0
+  blurDist: 0.1
+  blurStrength: 3.5
+  blurFrame: 3
+  hitReact:
+    cameraShake: 0
+    hitAudio: {fileID: 123372, guid: 5bd118c68dff4a3468665092d59577ca, type: 2}
+    canBlock: 0
+    blockFreeze: 4
+    blockFreezeSelf: 4
+    hitReactAni: 0
+    hitEffects: []
+    dynamicLightInstance: {fileID: 11498434, guid: 64e13920439b8a145b69ca59b061e138,
+      type: 2}
+    freeze: 4
+    freezeSelf: 4
+    hookEnable: 0
+    canBlockMonster: 0
+    hitReactAniMonster: 4
+    hitEffectsMonster: []
+    freezeMonster: 2
+    freezeMonsterSelf: 2
+  checkType: 0
+  attackSfx: {fileID: 0}
+  attackSfxProp:
+    gravity: 0
+    time: 2
+    speed: 0
+    traceSpeed: 0
+    follow: 0
+    bulletType: 0
+    attackInterval: 0
+    damageTotal: 1
+    damageInterval: 0.1
+    through: 0

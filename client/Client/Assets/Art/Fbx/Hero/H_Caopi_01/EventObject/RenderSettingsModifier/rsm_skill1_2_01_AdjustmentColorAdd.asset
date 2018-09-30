@@ -1,0 +1,120 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d030bf663bd9d81499943c4eb84ea04c, type: 3}
+  m_Name: rsm_skill1_2_01_AdjustmentColorAdd
+  m_EditorClassIdentifier: 
+  IsControlPartly: 1
+  NoPartlyColorCuve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  RCuve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: 0.004065037
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - time: 1
+      value: 0.004065037
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  GCuve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - time: 0.114924185
+      value: -0.0000426035
+      inSlope: -0.0006841219
+      outSlope: -0.0006841219
+      tangentMode: 0
+    - time: 0.5717902
+      value: 0.19675778
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - time: 0.7481767
+      value: 0.19690813
+      inSlope: 0.0013818499
+      outSlope: 0.0013818499
+      tangentMode: 0
+    - time: 0.9880287
+      value: -0.00000093711424
+      inSlope: 0.00015512342
+      outSlope: 0.00015512342
+      tangentMode: 0
+    - time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  BCuve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: 0.0008130063
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - time: 0.12038412
+      value: -0.000094054616
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - time: 0.5749721
+      value: 0.40111652
+      inSlope: -0.006634154
+      outSlope: -0.006634154
+      tangentMode: 0
+    - time: 0.7487157
+      value: 0.40001503
+      inSlope: -0.006900743
+      outSlope: -0.006900743
+      tangentMode: 0
+    - time: 0.9918607
+      value: 0.00047494879
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - time: 1
+      value: 0.0008130063
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  IsLerp: 0
+  Vec: {x: 0, y: 0, z: 0}

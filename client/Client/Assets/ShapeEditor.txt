@@ -1,0 +1,1 @@
+{"ScenePath":"Assets/Scene/ShapeEditor.unity","AppScenePath":"Assets/Scene/App.unity", "PrefabPath":"Resources/Hero"}

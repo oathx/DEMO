@@ -30,14 +30,14 @@ function main()
     if do_require() then
         local entity = Entity()
         if entity then
-            local thread = uvcore.new_thread(function(x, y, z)
-                local count = 0
-                while count < 100 do
-                    print("thread", count, x, y, z)
-                    count = count + 1 
-                end
-            end, 100, 200, 300)
+            print(uvcore.ikcp_create, uvcore.ikcp_release)
+            local a, b = uvcore.ikcp_create(1, function() 
+            
+            end)
 
+            print(a, b)
+
+            print("===============================")
             local server = entity:AddComponent(LogonApp)
             if server then
                 server:CreateServer(Serconf.host, Serconf.port, Serconf.max)

@@ -10,6 +10,5 @@ if "%platform%" EQU "x64" (set VS=%VS% Win64)
 cmake -H. -Bbuild -G"Visual Studio %VS%"
 cmake --build build --config Release
 mkdir ..\bin
-mkdir ..\bin\script
 copy build\Release\luv.dll ..\bin
 copy build\Release\luajit.exe ..\bin

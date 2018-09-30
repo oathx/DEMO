@@ -48,6 +48,8 @@ set(SOURCES
   ${LIBUVDIR}/src/uv-common.c
   ${LIBUVDIR}/src/uv-common.h
   ${LIBUVDIR}/src/version.c
+  ${LIBUVDIR}/src/ikcp.h
+  ${LIBUVDIR}/src/ikcp.c
 )
 
 if(WIN32)

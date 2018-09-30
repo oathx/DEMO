@@ -70,7 +70,5 @@ function OnAccept(self, client)
     local peer = client:getpeername()
     INFO("TcpClient Start peer family %s [%s:%s] client entity(%s)",
         peer.family, peer.ip, peer.port,  self.entity:GetID())
-
-    
 end
 

@@ -30,6 +30,7 @@
 #include "lbuffer.c"
 #include "lcmsgpack.c"
 #include "lsha1.c"
+#include "lkcp.c"
 
 static const luaL_Reg luv_functions[] = {
   // loop.c
@@ -51,6 +52,10 @@ static const luaL_Reg luv_functions[] = {
   { "new_buffer", luv_buffer_new },
   { "del_buffer", luv_buffer_gc},
   
+  // lkcp.c
+  {"ikcp_create", luv_ikcp_create},
+  {"ikcp_release", luv_ikcp_gc},
+
   // cmsgpack.c
   {"pack", mp_pack},
   {"unpack", mp_unpack},
@@ -531,7 +536,7 @@ LUALIB_API int luaopen_luv (lua_State *L) {
   luv_work_init(L);
   luv_buffer_init(L);
   luv_packet_init(L);
-
+  luv_ikcp_init(L);
   luaL_newlib(L, luv_functions);
   luv_constants(L);
   lua_setfield(L, -2, "constants");

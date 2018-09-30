@@ -1,0 +1,15 @@
+M       prop_scene.lua
+--------------------------------------------------------- 
+Index: prop_scene.lua
+===================================================================
+--- prop_scene.lua	(revision 86)
++++ prop_scene.lua	(working copy)
+@@ -7,6 +7,6 @@
+ 
+ propScene = {
+ 
+-	[SCENE_LOGIN] = { ID = SCENE_LOGIN, Path = "Scene/Login", Script = MOD_LOGIN, Version = 1,},
+-	[SCENE_MENU] = { ID = SCENE_MENU, Path = "Scene/Menu", Script = MOD_MENU, Version = 1,},
++	[SCENE_LOGIN] = { ID = SCENE_LOGIN, Path = "Scene/Login", Script = SYS_LOGIN, Version = 1,},
++	[SCENE_MENU] = { ID = SCENE_MENU, Path = "Scene/Menu", Script = SYS_MENU, Version = 1,},
+ }

@@ -18,9 +18,9 @@ function Init(self)
 			return PlayerEntity.new(id)
 		end,
 
-		[resmng.SYS_FIGHT] = function(id)
-			return FightSystemEntity.new(id)
-		end
+		--[resmng.SYS_FIGHT] = function(id)
+		--	return FightSystemEntity.new(id)
+		--end
 	})
 
 	PluginManager.GetSingleton():Startup()

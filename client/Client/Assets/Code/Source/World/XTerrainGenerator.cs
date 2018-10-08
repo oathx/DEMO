@@ -104,18 +104,22 @@ public class XTerrainGenerator : MonoBehaviour {
 	/// <param name="radius">Radius.</param>
 	public void 			UpdateTerrain(Vector3 worldPosition, int radius)
 	{
-		var chunkPosition = GetChunkPosition(worldPosition);
-		var newPositions = GetChunkPositionsInRadius(chunkPosition, radius);
+		var chunkPosition 	= GetChunkPosition(worldPosition);
+		var newPositions 	= GetChunkPositionsInRadius(chunkPosition, radius);
 
-		var loadedChunks = Cache.GetGeneratedChunks();
-		var chunksToRemove = loadedChunks.Except(newPositions).ToList();
+		var loadedChunks 	= Cache.GetGeneratedChunks();
+		var chunksRemove 	= loadedChunks.Except(newPositions).ToList();
+		var possGenerate 	= newPositions.Except(chunksRemove).ToList();
 
-		var positionsToGenerate = newPositions.Except(chunksToRemove).ToList();
-		foreach (var position in positionsToGenerate)
-			GenerateChunk(position.X, position.Z);
+		for (int i = 0; i < possGenerate.Count; i++) {
+			XVec2I v = possGenerate [i];
+			GenerateChunk(v.X, v.Z);
+		}
 
-		foreach (var position in chunksToRemove)
-			RemoveChunk(position.X, position.Z);
+		for (int i = 0; i < chunksRemove.Count; i++) {
+			XVec2I v = chunksRemove [i];
+			RemoveChunk(v.X, v.Z);
+		}
 	}
 
 	/// <summary>
@@ -125,8 +129,8 @@ public class XTerrainGenerator : MonoBehaviour {
 	/// <param name="worldPosition">World position.</param>
 	public XVec2I 			GetChunkPosition(Vector3 worldPosition)
 	{
-		var x = (int)Mathf.Floor(worldPosition.x / Settings.Length);
-		var z = (int)Mathf.Floor(worldPosition.z / Settings.Length);
+		int x = (int)Mathf.Floor(worldPosition.x / Settings.Length);
+		int z = (int)Mathf.Floor(worldPosition.z / Settings.Length);
 
 		return new XVec2I(x, z);
 	}
@@ -138,7 +142,7 @@ public class XTerrainGenerator : MonoBehaviour {
 	/// <param name="worldPosition">World position.</param>
 	public bool 			IsTerrainAvailable(Vector3 worldPosition)
 	{
-		var chunkPosition = GetChunkPosition(worldPosition);
+		XVec2I chunkPosition = GetChunkPosition(worldPosition);
 		return Cache.IsChunkGenerated(chunkPosition);
 	}
 
@@ -149,8 +153,8 @@ public class XTerrainGenerator : MonoBehaviour {
 	/// <param name="worldPosition">World position.</param>
 	public float 			GetTerrainHeight(Vector3 worldPosition)
 	{
-		var chunkPosition = GetChunkPosition(worldPosition);
-		var chunk = Cache.GetGeneratedChunk(chunkPosition);
+		XVec2I chunkPosition 	= GetChunkPosition(worldPosition);
+		XTerrainChunk chunk 	= Cache.GetGeneratedChunk(chunkPosition);
 		if (chunkPosition != null)
 			return chunk.GetTerrainHeight(worldPosition);
 

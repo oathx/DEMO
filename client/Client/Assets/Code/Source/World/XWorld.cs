@@ -6,7 +6,7 @@ using SLua;
 /// X world.
 /// </summary>
 [CustomLuaClass]
-public class XWorld : MonoBehaviour {
+public class XWorld : MonoBehaviour {	
 	/// <summary>
 	/// The instance.
 	/// </summary>
@@ -17,8 +17,23 @@ public class XWorld : MonoBehaviour {
 	/// </summary>
 	/// <returns>The singleton.</returns>
 	public static XWorld GetSingleton(){
+		if (!instance) {
+			GameObject singleton = new GameObject (typeof(XWorld).Name);
+			if (!singleton)
+				throw new System.NullReferenceException ();
+
+			instance = singleton.AddComponent<XWorld> ();
+
+			GameObject.DontDestroyOnLoad (singleton);
+		}
+
 		return instance;
 	}
+
+	/// <summary>
+	/// The can activate character.
+	/// </summary>
+	private bool 				CanActivateCharacter;
 
 	/// <summary>
 	/// The generator.
@@ -26,41 +41,28 @@ public class XWorld : MonoBehaviour {
 	public XTerrainGenerator 	Generator;
 	public int 					Radius;
 	public XVec2I 				CenterChunkPosition;
+
 	/// <summary>
 	/// The center.
 	/// </summary>
 	public Transform 			Center;
-	public bool 				CanActivateCharacter;
 
 	/// <summary>
 	/// Awake this instance.
 	/// </summary>
 	void Awake() {
-		instance 				= this;
 		CanActivateCharacter 	= false;
 	}
 
 	/// <summary>
 	/// Start this instance.
 	/// </summary>
-	IEnumerator Start(){
-		Generator.InitGenerate ();
-		Generator.UpdateTerrain(Center.position, Radius);
-
-		do
-		{
-			var exists = Generator.IsTerrainAvailable(Center.position);
-			if (exists)
-				CanActivateCharacter = true;
-			yield return null;
-
-		} while (!CanActivateCharacter);
-
-		CenterChunkPosition = Generator.GetChunkPosition(Center.position);
-		Center.position = new Vector3(Center.position.x, 
-			Generator.GetTerrainHeight(Center.position) + 0.5f, Center.position.z);
-
-		Center.gameObject.SetActive(true);		 
+	void Start(){
+#if UNITY_EDITOR
+		LoadWorld (Center, Radius, delegate(XVec2I centerChunkPosition) {
+			
+		});
+#endif
 	}
 
 	/// <summary>
@@ -83,8 +85,8 @@ public class XWorld : MonoBehaviour {
 	/// <param name="center">Center.</param>
 	/// <param name="radius">Radius.</param>
 	/// <param name="complate">Complate.</param>
-	public void LoadWorld(Transform center, int radius, System.Action<bool> complate){
-		StartCoroutine (EnumeratorLoadWorld (center, radius, complate));
+	public void LoadWorld(Transform center, int radius, System.Action<XVec2I> complate){
+		StartCoroutine (OnLoadWorld (center, radius, complate));
 	}
 
 	/// <summary>
@@ -94,8 +96,8 @@ public class XWorld : MonoBehaviour {
 	/// <param name="center">Center.</param>
 	/// <param name="radius">Radius.</param>
 	/// <param name="complate">Complate.</param>
-	IEnumerator EnumeratorLoadWorld(Transform center, 
-		int radius, System.Action<bool> complate) {
+	IEnumerator OnLoadWorld(Transform center, 
+		int radius, System.Action<XVec2I> complate) {
 
 		Center = center;
 		Radius = radius;
@@ -117,5 +119,9 @@ public class XWorld : MonoBehaviour {
 			Generator.GetTerrainHeight(Center.position) + 0.5f, Center.position.z);
 
 		Center.gameObject.SetActive(true);
+
+		if (complate != null) {
+			complate (CenterChunkPosition);
+		}
 	}
 }

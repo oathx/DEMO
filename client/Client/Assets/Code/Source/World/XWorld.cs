@@ -91,6 +91,17 @@ public class XWorld : MonoBehaviour {
 	}
 
 	/// <summary>
+	/// Destroies the world.
+	/// </summary>
+	public void DestroyWorld(){
+		if (this.generator) {
+			GameObject.Destroy (this.generator);
+		}
+
+		Resources.UnloadUnusedAssets ();
+	}
+
+	/// <summary>
 	/// Loads the word.
 	/// </summary>
 	/// <param name="generator">Generator.</param>

@@ -18,7 +18,7 @@ public class XTerrainGenerator : MonoBehaviour {
 	/// The settings.
 	/// </summary>
 	private XTerrainChunkSetting 	Settings;
-	private XNoisePerlin 			NoiseProvider;
+	private XNoise 					NoiseProvider;
 
 	/// <summary>
 	/// The cache.

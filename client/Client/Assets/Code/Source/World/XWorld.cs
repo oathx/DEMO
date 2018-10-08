@@ -38,43 +38,33 @@ public class XWorld : MonoBehaviour {
 	/// <summary>
 	/// The generator.
 	/// </summary>
-	public XTerrainGenerator 	Generator;
-	public int 					Radius;
-	public XVec2I 				CenterChunkPosition;
+	private XTerrainGenerator 	generator;
+	private int 				radius;
+	private XVec2I 				centerChunkPosition;
 
 	/// <summary>
 	/// The center.
 	/// </summary>
-	public Transform 			Center;
+	private Transform 			center;
 
 	/// <summary>
 	/// Awake this instance.
 	/// </summary>
 	void Awake() {
 		CanActivateCharacter 	= false;
+		radius 					= 0;
 	}
-
-	/// <summary>
-	/// Start this instance.
-	/// </summary>
-	void Start(){
-#if UNITY_EDITOR
-		LoadWorld (Center, Radius, delegate(XVec2I centerChunkPosition) {
-			
-		});
-#endif
-	}
-
+		
 	/// <summary>
 	/// Update this instance.
 	/// </summary>
 	void Update(){
-		if (Center.gameObject.activeSelf && CanActivateCharacter) {
-			XVec2I curChunkPosition = Generator.GetChunkPosition(Center.position);
-			if (!curChunkPosition.Equals(CenterChunkPosition))
+		if (CanActivateCharacter && center.gameObject.activeSelf) {
+			XVec2I curChunkPosition = generator.GetChunkPosition(center.position);
+			if (!curChunkPosition.Equals(centerChunkPosition))
 			{
-				Generator.UpdateTerrain(Center.position, Radius);
-				CenterChunkPosition = curChunkPosition;
+				generator.UpdateTerrain(center.position, radius);
+				centerChunkPosition = curChunkPosition;
 			}	
 		}
 	}
@@ -85,8 +75,36 @@ public class XWorld : MonoBehaviour {
 	/// <param name="center">Center.</param>
 	/// <param name="radius">Radius.</param>
 	/// <param name="complate">Complate.</param>
-	public void LoadWorld(Transform center, int radius, System.Action<XVec2I> complate){
-		StartCoroutine (OnLoadWorld (center, radius, complate));
+	public void LoadWorld(string szGeneratorPath, Transform center, int radius, System.Action<XVec2I> complate){
+		ResourceManager.GetSingleton ().LoadAsync (szGeneratorPath, typeof(UnityEngine.Object), delegate(UnityEngine.Object res) {
+			UnityEngine.GameObject obj = UnityEngine.Object.Instantiate(res) as UnityEngine.GameObject;
+			if (obj){
+				this.generator	= obj.GetComponent<XTerrainGenerator>();
+				this.center		= center;
+				this.radius 	= radius;
+
+				StartCoroutine (
+					OnLoadWorld (complate)
+				);	
+			}
+		});
+	}
+
+	/// <summary>
+	/// Loads the word.
+	/// </summary>
+	/// <param name="generator">Generator.</param>
+	/// <param name="center">Center.</param>
+	/// <param name="radius">Radius.</param>
+	/// <param name="complate">Complate.</param>
+	public void LoadWord(XTerrainGenerator generator, Transform center, int radius, System.Action<XVec2I> complate){
+		this.generator	= generator;
+		this.center		= center;
+		this.radius 	= radius;
+
+		StartCoroutine (
+			OnLoadWorld (complate)
+		);
 	}
 
 	/// <summary>
@@ -96,32 +114,27 @@ public class XWorld : MonoBehaviour {
 	/// <param name="center">Center.</param>
 	/// <param name="radius">Radius.</param>
 	/// <param name="complate">Complate.</param>
-	IEnumerator OnLoadWorld(Transform center, 
-		int radius, System.Action<XVec2I> complate) {
-
-		Center = center;
-		Radius = radius;
-
-		Generator.InitGenerate ();
-		Generator.UpdateTerrain(Center.position, Radius);
+	IEnumerator OnLoadWorld(System.Action<XVec2I> complate) {
+		generator.InitGenerate ();
+		generator.UpdateTerrain(center.position, radius);
 
 		do
 		{
-			var exists = Generator.IsTerrainAvailable(Center.position);
+			var exists = generator.IsTerrainAvailable(center.position);
 			if (exists)
 				CanActivateCharacter = true;
 			yield return null;
 
 		} while (!CanActivateCharacter);
 
-		CenterChunkPosition = Generator.GetChunkPosition(Center.position);
-		Center.position = new Vector3(Center.position.x, 
-			Generator.GetTerrainHeight(Center.position) + 0.5f, Center.position.z);
+		centerChunkPosition = generator.GetChunkPosition(center.position);
+		center.position = new Vector3(center.position.x, 
+			generator.GetTerrainHeight(center.position) + 0.5f, center.position.z);
 
-		Center.gameObject.SetActive(true);
+		center.gameObject.SetActive(true);
 
 		if (complate != null) {
-			complate (CenterChunkPosition);
+			complate (centerChunkPosition);
 		}
 	}
 }

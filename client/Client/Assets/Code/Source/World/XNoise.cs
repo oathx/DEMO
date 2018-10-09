@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using SLua;
-
+using LibNoise;
+using LibNoise.Generator;
+using LibNoise.Operator;
 
 /// <summary>
 /// X noise.
@@ -145,4 +147,68 @@ public class XNoisePerlin : XNoise
 		return heightMapBuilder.GetTexture (LibNoise.GradientPresets.RGBA);
 	}
 }
-	
+
+public class XNoiseTurbulence : XNoise
+{
+    private Turbulence          finalTerrain;
+    private LibNoise.Noise2D    heightMapBuilder;
+
+    public XNoiseTurbulence()
+    {
+        left 	= 6;
+        right 	= 10;
+        top 	= 1;
+        bottom 	= 5;
+
+        var mountainTerrain = new RidgedMultifractal();
+
+        var baseFlatTerrain = new Billow();
+        baseFlatTerrain.Frequency = 2.0;
+
+        var flatTerrain = new ScaleBias(0.125, -0.75, baseFlatTerrain);
+
+        var terrainType = new Perlin();
+        terrainType.Frequency   = 0.5;
+        terrainType.Persistence = 0.25;
+
+        var terrainSelector = new Select(flatTerrain, mountainTerrain, terrainType);
+        terrainSelector.SetBounds(0, 1000);
+        terrainSelector.FallOff = 0.125f;
+
+        var terrainScaler = new ScaleBias(terrainSelector);
+        terrainScaler.Scale = 375;
+        terrainScaler.Bias  = 375;
+
+        finalTerrain = new Turbulence(terrainScaler);
+        finalTerrain.Frequency  = 4;
+        finalTerrain.Power      = 0.125f;
+    }
+
+    public override float GetValue(float x, float z)
+    {
+        return 0f;
+    }
+
+    /// <summary>
+    /// Gets the height map data.
+    /// </summary>
+    /// <returns>The height map data.</returns>
+    /// <param name="w">The width.</param>
+    /// <param name="h">The height.</param>
+    public override float[,] GetHeightmapData(int w, int h, int x, int z)
+    {
+        heightMapBuilder = new Noise2D(w, h, finalTerrain);
+		heightMapBuilder.GeneratePlanar(left, right, top, bottom);
+
+        return heightMapBuilder.GetData();
+    }
+
+    /// <summary>
+    /// Gets the alphamap.
+    /// </summary>
+    /// <returns>The alphamap.</returns>
+    public override Texture2D GetAlphamap()
+    {
+        return heightMapBuilder.GetTexture(LibNoise.GradientPresets.RGBA);
+    }
+}

@@ -99,7 +99,7 @@ public class XTerrainChunk {
     /// <summary>
     /// 
     /// </summary>
-    private List<Vector2>           TreePoint
+    private List<Vector3>           TreePoint
     { get; set; }
 
 	/// <summary>
@@ -116,6 +116,7 @@ public class XTerrainChunk {
 		NoiseProvider 		= noise;
 		Neighborhood 		= new XChunkNeighborhood();
 		Position 			= new XVec2I(x, z);
+        TreePoint           = new List<Vector3>();
 	}
 
 	/// <summary>
@@ -139,25 +140,18 @@ public class XTerrainChunk {
 
             if (Setting.Trees.Count > 0)
             {
-                TreePoint = new List<Vector2>();
-                int baseVal = 10;
-                int heightV = 30;
-
-                int minHeightmapResolution = Setting.HeightmapResolution < 33 ? 33 : Setting.HeightmapResolution;
                 for (var zRes = 0; zRes < Setting.HeightmapResolution; zRes++)
                 {
                     for (var xRes = 0; xRes < Setting.HeightmapResolution; xRes++)
                     {
-                        float v = Heightmap[zRes, xRes];
-                        if (Mathf.FloorToInt(v * 100) > heightV)
+                        int height = Mathf.FloorToInt(Heightmap[zRes, xRes] * 100);
+                        if (height > 0 && zRes % 20 == 0 && xRes % 20 == 0)
                         {
-                            if (zRes % baseVal == 0 && xRes % baseVal == 0)
-                            {
-                                var xCoordinate = (float)xRes / (minHeightmapResolution - 1);
-                                var zCoordinate = (float)zRes / (minHeightmapResolution - 1);
+                            var xCoordinate = (float)xRes / (Setting.HeightmapResolution - 1);
+                            var zCoordinate = (float)zRes / (Setting.HeightmapResolution - 1);
 
-                                TreePoint.Add(new Vector2(xCoordinate, zCoordinate));
-                            }
+                            Vector3 point = new Vector3(xCoordinate, zCoordinate, height);
+                            TreePoint.Add(point);
                         }
                     }
                 }
@@ -212,6 +206,26 @@ public class XTerrainChunk {
         ApplyTrees(Data);
 	}
 
+    private int GetTreeIndex(float height)
+    {
+        if (height > 0 && height < 15)
+        {
+            return 0;
+        }
+
+        if (height > 15 && height < 30)
+        {
+            return 1;
+        }
+
+        if (height > 30 && height < 45)
+        {
+            return 2;
+        }
+
+        return 3;
+    }
+
     /// <summary>
     /// 
     /// </summary>
@@ -230,19 +244,22 @@ public class XTerrainChunk {
             }
 
             terrainData.treePrototypes = trees.ToArray();
-            Debug.LogError(TreePoint.Count);
-            foreach (var vpos in TreePoint)
+
+            for (int i = 0; i < TreePoint.Count; i++)
             {
-                for (int i = 0; i < 5; i++)
+                Vector3 vpos = TreePoint[i];
+          
+                for (int j = 0; j < 5; j++)
                 {
                     TreeInstance tmpTreeInstances = new TreeInstance();
-                    tmpTreeInstances.prototypeIndex = Random.Range(0, Setting.Trees.Count - 1); // ID of tree prototype
-                    tmpTreeInstances.position = new Vector3(Random.Range(vpos.x - 0.1f, vpos.x + 0.1f), -0.1f, Random.Range(vpos.y - 0.1f, vpos.y + 0.1f));   // not regular pos,  [0,1]
+                    tmpTreeInstances.prototypeIndex = GetTreeIndex(vpos.z);
+                    tmpTreeInstances.position = new Vector3(Random.Range(vpos.x - 0.1f, vpos.x + 0.1f), -0.1f, Random.Range(vpos.y - 0.1f, vpos.y + 0.1f));
                     tmpTreeInstances.color = new Color(1, 1, 1, 1);
-                    tmpTreeInstances.lightmapColor = new Color(1, 1, 1, 1);//must add
-                    float ss = Random.Range(0.8f, 1f);
-                    tmpTreeInstances.heightScale = ss; //same size as prototype
-                    tmpTreeInstances.widthScale = ss;
+                    tmpTreeInstances.lightmapColor = new Color(1, 1, 1, 1);
+
+                    float scale = Random.Range(0.8f, 1f);
+                    tmpTreeInstances.heightScale = scale;
+                    tmpTreeInstances.widthScale = scale;
                     Terrain.AddTreeInstance(tmpTreeInstances);
                 }
             }

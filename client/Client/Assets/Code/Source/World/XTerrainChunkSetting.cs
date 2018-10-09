@@ -7,7 +7,7 @@ using System.Collections.Generic;
 /// terrain chunk setting.
 /// </summary>
 [CustomLuaClass]
-public class XTerrainChunkSetting{
+public class XTerrainChunkSetting : ScriptableObject {
 	/// <summary>
 	/// Gets the heightmap resolution.
 	/// </summary>
@@ -49,6 +49,12 @@ public class XTerrainChunkSetting{
     public List<Texture2D> Textures
     { get; private set; }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    public List<GameObject> Trees
+    { get; private set; }
+
 	/// <summary>
 	/// Initializes a new instance of the <see cref="XTerrainChunkSetting"/> class.
 	/// </summary>
@@ -59,8 +65,8 @@ public class XTerrainChunkSetting{
 	/// <param name="flatTexture">Flat texture.</param>
 	/// <param name="steepTexture">Steep texture.</param>
 	/// <param name="terrainMaterial">Terrain material.</param>
-	public XTerrainChunkSetting(int heightmapResolution, int alphamapResolution, 
-		int length, int height, Material terrainMaterial, List<Texture2D> textures)
+	public XTerrainChunkSetting(int heightmapResolution, int alphamapResolution,
+        int length, int height, Material terrainMaterial, List<Texture2D> textures, List<GameObject> trees)
 	{
 		HeightmapResolution = heightmapResolution;
 		AlphamapResolution 	= alphamapResolution;
@@ -68,5 +74,6 @@ public class XTerrainChunkSetting{
 		Height 				= height;
 		TerrainMaterial 	= terrainMaterial;
         Textures            = textures;
+        Trees               = trees;
 	}
 }

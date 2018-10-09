@@ -13,6 +13,7 @@ public enum XNoiseType {
 public class XTerrainGenerator : MonoBehaviour {
 	public Material 				TerrainMaterial;
     public List<Texture2D>          Textures = new List<Texture2D>();
+    public List<GameObject>         Trees = new List<GameObject>();
 
 	public int 						HeightmapResolution;
 	public int 						AlphamapResolution;
@@ -51,7 +52,7 @@ public class XTerrainGenerator : MonoBehaviour {
 	/// Inits the generate.
 	/// </summary>
 	public void 			InitGenerate(){
-        Settings        = new XTerrainChunkSetting(HeightmapResolution, AlphamapResolution, Length, Height, TerrainMaterial, Textures);
+        Settings        = new XTerrainChunkSetting(HeightmapResolution, AlphamapResolution, Length, Height, TerrainMaterial, Textures, Trees);
         NoiseProvider   = new XNoiseDefault();
 		Cache 			= new XTerrainChunkCache();
 	}

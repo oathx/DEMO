@@ -96,6 +96,12 @@ public class XTerrainChunk {
 	private object					HeightmapThread
 	{ get; set; }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    private List<Vector2>           TreePoint
+    { get; set; }
+
 	/// <summary>
 	/// Initializes a new instance of the <see cref="XTerrainChunk"/> class.
 	/// </summary>
@@ -130,6 +136,32 @@ public class XTerrainChunk {
 		lock (HeightmapThread)
 		{
             Heightmap = NoiseProvider.GetHeightmapData(Setting.HeightmapResolution, Setting.HeightmapResolution, Position.X, Position.Z);
+
+            if (Setting.Trees.Count > 0)
+            {
+                TreePoint = new List<Vector2>();
+                int baseVal = 10;
+                int heightV = 30;
+
+                int minHeightmapResolution = Setting.HeightmapResolution < 33 ? 33 : Setting.HeightmapResolution;
+                for (var zRes = 0; zRes < Setting.HeightmapResolution; zRes++)
+                {
+                    for (var xRes = 0; xRes < Setting.HeightmapResolution; xRes++)
+                    {
+                        float v = Heightmap[zRes, xRes];
+                        if (Mathf.FloorToInt(v * 100) > heightV)
+                        {
+                            if (zRes % baseVal == 0 && xRes % baseVal == 0)
+                            {
+                                var xCoordinate = (float)xRes / (minHeightmapResolution - 1);
+                                var zCoordinate = (float)zRes / (minHeightmapResolution - 1);
+
+                                TreePoint.Add(new Vector2(xCoordinate, zCoordinate));
+                            }
+                        }
+                    }
+                }
+            }
 		}
 	}
 
@@ -176,7 +208,50 @@ public class XTerrainChunk {
 		Terrain.materialTemplate 		= Setting.TerrainMaterial;
 		Terrain.reflectionProbeUsage 	= UnityEngine.Rendering.ReflectionProbeUsage.Off;
 		Terrain.Flush();
+
+        ApplyTrees(Data);
 	}
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="terrainData"></param>
+    private void ApplyTrees(TerrainData terrainData)
+    {
+        if (Setting.Trees.Count > 0)
+        {
+            List<TreePrototype> trees = new List<TreePrototype>();
+            for (int i = 0; i < Setting.Trees.Count; i++)
+            {
+                TreePrototype tree = new TreePrototype();
+                tree.prefab = Setting.Trees[i];
+
+                trees.Add(tree);
+            }
+
+            terrainData.treePrototypes = trees.ToArray();
+            Debug.LogError(TreePoint.Count);
+            foreach (var vpos in TreePoint)
+            {
+                for (int i = 0; i < 5; i++)
+                {
+                    TreeInstance tmpTreeInstances = new TreeInstance();
+                    tmpTreeInstances.prototypeIndex = Random.Range(0, Setting.Trees.Count - 1); // ID of tree prototype
+                    tmpTreeInstances.position = new Vector3(Random.Range(vpos.x - 0.1f, vpos.x + 0.1f), -0.1f, Random.Range(vpos.y - 0.1f, vpos.y + 0.1f));   // not regular pos,  [0,1]
+                    tmpTreeInstances.color = new Color(1, 1, 1, 1);
+                    tmpTreeInstances.lightmapColor = new Color(1, 1, 1, 1);//must add
+                    float ss = Random.Range(0.8f, 1f);
+                    tmpTreeInstances.heightScale = ss; //same size as prototype
+                    tmpTreeInstances.widthScale = ss;
+                    Terrain.AddTreeInstance(tmpTreeInstances);
+                }
+            }
+
+            TerrainCollider tc = Terrain.GetComponent<TerrainCollider>();
+            tc.enabled = false;
+            tc.enabled = true;
+        }
+    }
 
 	/// <summary>
 	/// Applies the textures.

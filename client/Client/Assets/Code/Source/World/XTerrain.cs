@@ -196,6 +196,8 @@ public class XTerrainChunk {
 
 		terrainData.RefreshPrototypes();
 
+        
+
 		// proc alphamap
 		var splatMap = new float[terrainData.alphamapResolution, terrainData.alphamapResolution, 2];
 		for (var zRes = 0; zRes < terrainData.alphamapHeight; zRes++)
@@ -210,6 +212,9 @@ public class XTerrainChunk {
 
 				splatMap[zRes, xRes, 0] = 1f - steepnessNormalized;
 				splatMap[zRes, xRes, 1] = steepnessNormalized;
+            
+                //splatMap[zRes, xRes, 0] = alphamap.GetPixel(zRes, xRes).b;
+                //splatMap[zRes, xRes, 1] = alphamap.GetPixel(zRes, xRes).g;
 			}
 		}
 

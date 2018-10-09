@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Threading;
 using SLua;
+using System.Collections.Generic;
 
 /// <summary>
 /// terrain chunk setting.
@@ -36,25 +37,17 @@ public class XTerrainChunkSetting{
 	{ get; private set; }
 
 	/// <summary>
-	/// Gets the flat texture.
-	/// </summary>
-	/// <value>The flat texture.</value>
-	public Texture2D 	FlatTexture 
-	{ get; private set; }
-
-	/// <summary>
-	/// Gets the steep texture.
-	/// </summary>
-	/// <value>The steep texture.</value>
-	public Texture2D 	SteepTexture 
-	{ get; private set; }
-
-	/// <summary>
 	/// Gets the terrain material.
 	/// </summary>
 	/// <value>The terrain material.</value>
 	public Material 	TerrainMaterial 
 	{ get; private set; }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public List<Texture2D> Textures
+    { get; private set; }
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="XTerrainChunkSetting"/> class.
@@ -67,14 +60,13 @@ public class XTerrainChunkSetting{
 	/// <param name="steepTexture">Steep texture.</param>
 	/// <param name="terrainMaterial">Terrain material.</param>
 	public XTerrainChunkSetting(int heightmapResolution, int alphamapResolution, 
-		int length, int height, Texture2D flatTexture, Texture2D steepTexture, Material terrainMaterial)
+		int length, int height, Material terrainMaterial, List<Texture2D> textures)
 	{
 		HeightmapResolution = heightmapResolution;
 		AlphamapResolution 	= alphamapResolution;
 		Length 				= length;
 		Height 				= height;
-		FlatTexture 		= flatTexture;
-		SteepTexture 		= steepTexture;
 		TerrainMaterial 	= terrainMaterial;
+        Textures            = textures;
 	}
 }

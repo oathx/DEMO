@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Threading;
 using SLua;
+using System.Collections.Generic;
 
 public enum TerrainNeighbor
 {
@@ -183,38 +184,31 @@ public class XTerrainChunk {
 	/// <param name="terrainData">Terrain data.</param>
 	private void 	ApplyTextures(TerrainData terrainData)
 	{
-		SplatPrototype flatSplat 	= new SplatPrototype();
-		SplatPrototype stepSplat 	= new SplatPrototype();
+        List<SplatPrototype> splats = new List<SplatPrototype>();
+        for (int i = 0; i < Setting.Textures.Count; i++)
+        {
+            SplatPrototype splat = new SplatPrototype();
+            splat.texture = Setting.Textures[i];
 
-		flatSplat.texture 	= Setting.FlatTexture;
-		stepSplat.texture 	= Setting.SteepTexture;
+            splats.Add(splat);
+        }
 
-		terrainData.splatPrototypes = new SplatPrototype[] {
-			flatSplat,
-			stepSplat
-		};
-
+        terrainData.splatPrototypes = splats.ToArray();
 		terrainData.RefreshPrototypes();
 
-        
-
+        Texture2D alphamap = NoiseProvider.GetAlphamap();
 		// proc alphamap
-		var splatMap = new float[terrainData.alphamapResolution, terrainData.alphamapResolution, 2];
+        var splatMap = new float[terrainData.alphamapResolution, terrainData.alphamapResolution, splats.Count];
 		for (var zRes = 0; zRes < terrainData.alphamapHeight; zRes++)
 		{
 			for (var xRes = 0; xRes < terrainData.alphamapWidth; xRes++)
 			{
-				var normalizedX = (float)xRes / (terrainData.alphamapWidth - 1);
-				var normalizedZ = (float)zRes / (terrainData.alphamapHeight - 1);
-
-				var steepness 			= terrainData.GetSteepness(normalizedX, normalizedZ);
-				var steepnessNormalized = Mathf.Clamp(steepness / 1.5f, 0, 1f);
-
-				splatMap[zRes, xRes, 0] = 1f - steepnessNormalized;
-				splatMap[zRes, xRes, 1] = steepnessNormalized;
-            
-                //splatMap[zRes, xRes, 0] = alphamap.GetPixel(zRes, xRes).b;
-                //splatMap[zRes, xRes, 1] = alphamap.GetPixel(zRes, xRes).g;
+                Color clr   = alphamap.GetPixel(zRes, xRes);
+                
+                splatMap[zRes, xRes, 0] = clr.r;
+                splatMap[zRes, xRes, 1] = clr.g;
+                splatMap[zRes, xRes, 2] = clr.b;
+                splatMap[zRes, xRes, 3] = clr.a;
 			}
 		}
 

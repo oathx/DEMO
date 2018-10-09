@@ -12,8 +12,8 @@ public enum XNoiseType {
 [CustomLuaClass]
 public class XTerrainGenerator : MonoBehaviour {
 	public Material 				TerrainMaterial;
-	public Texture2D 				FlatTexture;
-	public Texture2D 				SteepTexture;
+    public List<Texture2D>          Textures = new List<Texture2D>();
+
 	public int 						HeightmapResolution;
 	public int 						AlphamapResolution;
 	public int 						Length;
@@ -51,7 +51,7 @@ public class XTerrainGenerator : MonoBehaviour {
 	/// Inits the generate.
 	/// </summary>
 	public void 			InitGenerate(){
-		Settings 		= new XTerrainChunkSetting(HeightmapResolution, AlphamapResolution, Length, Height, FlatTexture, SteepTexture, TerrainMaterial);
+        Settings        = new XTerrainChunkSetting(HeightmapResolution, AlphamapResolution, Length, Height, TerrainMaterial, Textures);
         NoiseProvider   = new XNoiseDefault();
 		Cache 			= new XTerrainChunkCache();
 	}

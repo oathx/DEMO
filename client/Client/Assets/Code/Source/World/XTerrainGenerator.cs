@@ -4,6 +4,11 @@ using System.Linq;
 using UnityEngine;
 using SLua;
 
+public enum XNoiseType {
+    NT_NONE = 0,
+    NT_PERLIN = 1,
+};
+
 [CustomLuaClass]
 public class XTerrainGenerator : MonoBehaviour {
 	public Material 				TerrainMaterial;
@@ -13,6 +18,7 @@ public class XTerrainGenerator : MonoBehaviour {
 	public int 						AlphamapResolution;
 	public int 						Length;
 	public int 						Height;
+    public XNoiseType               NoiseType = XNoiseType.NT_PERLIN;
 
 	/// <summary>
 	/// The settings.
@@ -46,7 +52,7 @@ public class XTerrainGenerator : MonoBehaviour {
 	/// </summary>
 	public void 			InitGenerate(){
 		Settings 		= new XTerrainChunkSetting(HeightmapResolution, AlphamapResolution, Length, Height, FlatTexture, SteepTexture, TerrainMaterial);
-		NoiseProvider 	= new XNoisePerlin();
+        NoiseProvider   = new XNoiseDefault();
 		Cache 			= new XTerrainChunkCache();
 	}
 
@@ -59,8 +65,43 @@ public class XTerrainGenerator : MonoBehaviour {
 	{
 		if (Cache.ChunkCanBeAdded(x, z))
 		{
-			var chunk = new XTerrainChunk(Settings, NoiseProvider, x, z);
-			Cache.AddNewChunk(chunk);
+            XNoise noise = null;
+            if (NoiseType == XNoiseType.NT_NONE)
+            {
+                noise = NoiseProvider;
+            }
+            else if (NoiseType == XNoiseType.NT_PERLIN)
+            {
+                noise = new XNoisePerlin();
+                if (x > 0)
+                {
+                    int offset = (noise.bottom - noise.top) * x;
+                    noise.top = noise.top + offset;
+                    noise.bottom = noise.bottom + offset;
+                }
+                else
+                {
+                    int offset = (noise.bottom - noise.top) * x;
+                    noise.top = noise.top + offset;
+                    noise.bottom = noise.bottom + offset;
+                }
+
+                if (z > 0)
+                {
+                    int offset = (noise.right - noise.left) * z;
+                    noise.left = noise.left + offset;
+                    noise.right = noise.right + offset;
+                }
+                else
+                {
+                    int offset = (noise.right - noise.left) * z;
+                    noise.left = noise.left + offset;
+                    noise.right = noise.right + offset;
+                }
+            }
+
+            var chunk = new XTerrainChunk(Settings, noise, x, z);
+            Cache.AddNewChunk(chunk);
 		}
 	}
 

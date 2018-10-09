@@ -94,6 +94,8 @@ public class XWorld : MonoBehaviour {
 	/// Destroies the world.
 	/// </summary>
 	public void DestroyWorld(){
+		CanActivateCharacter = false;
+
 		if (this.generator) {
 			GameObject.Destroy (this.generator);
 		}

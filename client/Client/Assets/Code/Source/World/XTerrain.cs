@@ -120,6 +120,7 @@ public class XTerrainChunk {
 		thread.Start();
 	}
 
+
 	/// <summary>
 	/// Generates the heightmap thread.
 	/// </summary>
@@ -127,20 +128,7 @@ public class XTerrainChunk {
 	{
 		lock (HeightmapThread)
 		{
-			var heightmap = new float[Setting.HeightmapResolution, Setting.HeightmapResolution];
-
-			for (var zRes = 0; zRes < Setting.HeightmapResolution; zRes++)
-			{
-				for (var xRes = 0; xRes < Setting.HeightmapResolution; xRes++)
-				{
-					var xCoordinate = Position.X + (float)xRes / (Setting.HeightmapResolution - 1);
-					var zCoordinate = Position.Z + (float)zRes / (Setting.HeightmapResolution - 1);
-
-					heightmap[zRes, xRes] = NoiseProvider.GetValue(xCoordinate, zCoordinate);
-				}
-			}
-
-			Heightmap = heightmap;
+            Heightmap = NoiseProvider.GetHeightmapData(Setting.HeightmapResolution, Setting.HeightmapResolution, Position.X, Position.Z);
 		}
 	}
 

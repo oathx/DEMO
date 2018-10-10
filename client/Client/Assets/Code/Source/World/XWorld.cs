@@ -34,27 +34,40 @@ public class XWorld : MonoBehaviour {
 	/// The can activate character.
 	/// </summary>
 	private bool 				CanActivateCharacter;
+    private XVec2I              centerChunkPosition;
 
 	/// <summary>
 	/// The generator.
 	/// </summary>
-	private XTerrainGenerator 	generator;
-	private int 				radius;
-	private XVec2I 				centerChunkPosition;
-
-	/// <summary>
-	/// The center.
-	/// </summary>
-	private Transform 			center;
+	public XTerrainGenerator 	generator;
+    public int                  radius;
+	public Transform 			center;
 
 	/// <summary>
 	/// Awake this instance.
 	/// </summary>
 	void Awake() {
 		CanActivateCharacter 	= false;
-		radius 					= 0;
+		radius 					= 2;
+
+        if (!center)
+        {
+            GameObject defaultCenterTrans = new GameObject();
+            defaultCenterTrans.transform.position = Vector3.zero;
+            center = defaultCenterTrans.transform;
+        }
 	}
-		
+
+    /// <summary>
+    /// 
+    /// </summary>
+    void Start()
+    {
+        StartCoroutine(OnLoadWorld(delegate(XVec2I v){
+
+        }));
+    }
+
 	/// <summary>
 	/// Update this instance.
 	/// </summary>
@@ -67,57 +80,6 @@ public class XWorld : MonoBehaviour {
 				centerChunkPosition = curChunkPosition;
 			}	
 		}
-	}
-
-	/// <summary>
-	/// Loads the world.
-	/// </summary>
-	/// <param name="center">Center.</param>
-	/// <param name="radius">Radius.</param>
-	/// <param name="complate">Complate.</param>
-	public void LoadWorld(string szGeneratorPath, Transform center, int radius, System.Action<XVec2I> complate){
-		ResourceManager.GetSingleton ().LoadAsync (szGeneratorPath, typeof(UnityEngine.Object), delegate(UnityEngine.Object res) {
-			UnityEngine.GameObject obj = UnityEngine.Object.Instantiate(res) as UnityEngine.GameObject;
-			if (obj){
-				this.generator	= obj.GetComponent<XTerrainGenerator>();
-				this.center		= center;
-				this.radius 	= radius;
-
-				StartCoroutine (
-					OnLoadWorld (complate)
-				);	
-			}
-		});
-	}
-
-	/// <summary>
-	/// Destroies the world.
-	/// </summary>
-	public void DestroyWorld(){
-		CanActivateCharacter = false;
-
-		if (this.generator) {
-			GameObject.Destroy (this.generator);
-		}
-
-		Resources.UnloadUnusedAssets ();
-	}
-
-	/// <summary>
-	/// Loads the word.
-	/// </summary>
-	/// <param name="generator">Generator.</param>
-	/// <param name="center">Center.</param>
-	/// <param name="radius">Radius.</param>
-	/// <param name="complate">Complate.</param>
-	public void LoadWord(XTerrainGenerator generator, Transform center, int radius, System.Action<XVec2I> complate){
-		this.generator	= generator;
-		this.center		= center;
-		this.radius 	= radius;
-
-		StartCoroutine (
-			OnLoadWorld (complate)
-		);
 	}
 
 	/// <summary>

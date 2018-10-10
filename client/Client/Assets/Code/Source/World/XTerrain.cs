@@ -51,7 +51,7 @@ public class XTerrainChunk {
 	/// Gets or sets the terrain.
 	/// </summary>
 	/// <value>The terrain.</value>
-	private Terrain 				Terrain 
+	private Terrain 				TerrainChunk 
 	{ get; set; }
 
 	/// <summary>
@@ -102,6 +102,15 @@ public class XTerrainChunk {
     private List<Vector3>           TreePoint
     { get; set; }
 
+    private List<Vector3>           ChopPoint
+    { get; set; }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    private List<TreeInstance>      TreeInstances
+    { get; set; }
+
 	/// <summary>
 	/// Initializes a new instance of the <see cref="XTerrainChunk"/> class.
 	/// </summary>
@@ -117,6 +126,7 @@ public class XTerrainChunk {
 		Neighborhood 		= new XChunkNeighborhood();
 		Position 			= new XVec2I(x, z);
         TreePoint           = new List<Vector3>();
+        ChopPoint           = new List<Vector3>();
 	}
 
 	/// <summary>
@@ -145,13 +155,24 @@ public class XTerrainChunk {
                     for (var xRes = 0; xRes < Setting.HeightmapResolution; xRes++)
                     {
                         int height = Mathf.FloorToInt(Heightmap[zRes, xRes] * 100);
-                        if (height > 0 && zRes % 20 == 0 && xRes % 20 == 0)
+                        if (height > 30 && zRes % 20 == 0 && xRes % 20 == 0)
                         {
                             var xCoordinate = (float)xRes / (Setting.HeightmapResolution - 1);
                             var zCoordinate = (float)zRes / (Setting.HeightmapResolution - 1);
 
                             Vector3 point = new Vector3(xCoordinate, zCoordinate, height);
                             TreePoint.Add(point);
+                        }
+                        else
+                        {
+                            if (height == 0 && zRes % 10 == 0 && xRes % 10 == 0)
+                            {
+                                var xCoordinate = (float)xRes / (Setting.HeightmapResolution - 1);
+                                var zCoordinate = (float)zRes / (Setting.HeightmapResolution - 1);
+
+                                Vector3 point = new Vector3(xCoordinate, zCoordinate, height);
+                                ChopPoint.Add(point);
+                            }
                         }
                     }
                 }
@@ -165,7 +186,7 @@ public class XTerrainChunk {
 	/// <returns><c>true</c> if this instance is heightmap ready; otherwise, <c>false</c>.</returns>
 	public bool 	IsHeightmapReady()
 	{
-		return (Terrain == null && Heightmap != null);
+		return (TerrainChunk == null && Heightmap != null);
 	}
 
 	/// <summary>
@@ -175,7 +196,7 @@ public class XTerrainChunk {
 	/// <param name="worldPosition">World position.</param>
 	public float 	GetTerrainHeight(Vector3 worldPosition)
 	{
-		return Terrain.SampleHeight(worldPosition);
+        return TerrainChunk.SampleHeight(worldPosition);
 	}
 
 	/// <summary>
@@ -196,12 +217,12 @@ public class XTerrainChunk {
 		newTerrainGameObject.transform.position = new Vector3(Position.X * Setting.Length, 0, Position.Z * Setting.Length);
 
 		// create a new terrain chunk
-		Terrain = newTerrainGameObject.GetComponent<Terrain>();
-		Terrain.heightmapPixelError 	= 8;
-		Terrain.materialType 			= UnityEngine.Terrain.MaterialType.Custom;
-		Terrain.materialTemplate 		= Setting.TerrainMaterial;
-		Terrain.reflectionProbeUsage 	= UnityEngine.Rendering.ReflectionProbeUsage.Off;
-		Terrain.Flush();
+        TerrainChunk = newTerrainGameObject.GetComponent<Terrain>();
+        TerrainChunk.heightmapPixelError = 8;
+        TerrainChunk.materialType = UnityEngine.Terrain.MaterialType.Custom;
+        TerrainChunk.materialTemplate = Setting.TerrainMaterial;
+        TerrainChunk.reflectionProbeUsage = UnityEngine.Rendering.ReflectionProbeUsage.Off;
+        TerrainChunk.Flush();
 
         ApplyTrees(Data);
 	}
@@ -234,6 +255,28 @@ public class XTerrainChunk {
     {
         if (Setting.Trees.Count > 0)
         {
+            
+            int maxCounts = 5;
+            int treeIndex = Random.Range(0, Setting.Trees.Count - 1);
+            for (int i = 0; i < ChopPoint.Count; i++)
+            {
+                Vector3 treePoint = ChopPoint[i];
+                
+                for (int j = 0; j < maxCounts; j++)
+                {
+                    Vector3 random = new Vector3(Random.Range(treePoint.x - 0.1f, treePoint.x + 0.1f),
+                        -0.1f, Random.Range(treePoint.y - 0.1f, treePoint.y + 0.1f));
+
+                    Vector3 position = Vector3.Scale(random, TerrainChunk.terrainData.size) + TerrainChunk.transform.position;
+                    position.y = TerrainChunk.SampleHeight(position);
+
+                    GameObject tree = GameObject.Instantiate(Setting.Trees[treeIndex]);
+                    tree.transform.position = position;
+                    tree.transform.parent = TerrainChunk.transform;
+                }
+            }
+
+            
             List<TreePrototype> trees = new List<TreePrototype>();
             for (int i = 0; i < Setting.Trees.Count; i++)
             {
@@ -249,10 +292,10 @@ public class XTerrainChunk {
             {
                 Vector3 vpos = TreePoint[i];
           
-                for (int j = 0; j < 5; j++)
+                for (int j = 0; j < 10; j++)
                 {
                     TreeInstance tmpTreeInstances = new TreeInstance();
-                    tmpTreeInstances.prototypeIndex = GetTreeIndex(vpos.z);
+                    tmpTreeInstances.prototypeIndex = 3;
                     tmpTreeInstances.position = new Vector3(Random.Range(vpos.x - 0.1f, vpos.x + 0.1f), -0.1f, Random.Range(vpos.y - 0.1f, vpos.y + 0.1f));
                     tmpTreeInstances.color = new Color(1, 1, 1, 1);
                     tmpTreeInstances.lightmapColor = new Color(1, 1, 1, 1);
@@ -260,13 +303,35 @@ public class XTerrainChunk {
                     float scale = Random.Range(0.8f, 1f);
                     tmpTreeInstances.heightScale = scale;
                     tmpTreeInstances.widthScale = scale;
-                    Terrain.AddTreeInstance(tmpTreeInstances);
+                    TerrainChunk.AddTreeInstance(tmpTreeInstances);
                 }
             }
 
-            TerrainCollider tc = Terrain.GetComponent<TerrainCollider>();
+            TerrainCollider tc = TerrainChunk.GetComponent<TerrainCollider>();
             tc.enabled = false;
             tc.enabled = true;
+        }
+    }
+
+    public void ReplaceTree()
+    {
+        RaycastHit hit;
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+        if (Physics.Raycast(ray, out hit, 10.0f))
+        {
+            List<TreeInstance> allTrees = new List<TreeInstance>(TerrainChunk.terrainData.treeInstances);
+            for (int i = 0; i < allTrees.Count; i++)
+            {
+                allTrees.RemoveAt(i);
+            }
+
+            TerrainChunk.terrainData.treeInstances = allTrees.ToArray();
+
+            float[,] heights = TerrainChunk.terrainData.GetHeights(0, 0, 0, 0);
+            TerrainChunk.terrainData.SetHeights(0, 0, heights);
+
+            TerrainChunk.Flush();
         }
     }
 
@@ -281,7 +346,6 @@ public class XTerrainChunk {
         {
             SplatPrototype splat = new SplatPrototype();
             splat.texture = Setting.Textures[i];
-
             splats.Add(splat);
         }
 
@@ -363,8 +427,8 @@ public class XTerrainChunk {
 			Neighborhood.ZUp = null;
 		}
 
-		if (Terrain != null)
-			GameObject.Destroy(Terrain.gameObject);
+        if (TerrainChunk != null)
+            GameObject.Destroy(TerrainChunk.gameObject);
 	}
 
 	/// <summary>
@@ -421,15 +485,15 @@ public class XTerrainChunk {
 	/// </summary>
 	public void UpdateNeighbors()
 	{
-		if (Terrain != null)
+        if (TerrainChunk != null)
 		{
-			var xDown 	= Neighborhood.XDown == null ? null : Neighborhood.XDown.Terrain;
-			var xUp 	= Neighborhood.XUp == null ? null : Neighborhood.XUp.Terrain;
-			var zDown 	= Neighborhood.ZDown == null ? null : Neighborhood.ZDown.Terrain;
-			var zUp 	= Neighborhood.ZUp == null ? null : Neighborhood.ZUp.Terrain;
+            var xDown = Neighborhood.XDown == null ? null : Neighborhood.XDown.TerrainChunk;
+            var xUp = Neighborhood.XUp == null ? null : Neighborhood.XUp.TerrainChunk;
+            var zDown = Neighborhood.ZDown == null ? null : Neighborhood.ZDown.TerrainChunk;
+            var zUp = Neighborhood.ZUp == null ? null : Neighborhood.ZUp.TerrainChunk;
 
-			Terrain.SetNeighbors(xDown, zUp, xUp, zDown);
-			Terrain.Flush();
+            TerrainChunk.SetNeighbors(xDown, zUp, xUp, zDown);
+            TerrainChunk.Flush();
 		}
 	}
 }

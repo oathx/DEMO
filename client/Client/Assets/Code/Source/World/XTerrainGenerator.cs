@@ -45,6 +45,12 @@ public class XTerrainGenerator : MonoBehaviour {
 	/// </summary>
 	void Update()
 	{
+        if (Input.GetMouseButtonDown(0))
+        {
+            XTerrainChunk chunk = GetTerrainChunk(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+            chunk.ReplaceTree();
+        }
+
 		Cache.Update();
 	}
 
@@ -127,9 +133,9 @@ public class XTerrainGenerator : MonoBehaviour {
 	{
 		var result = new List<XVec2I>();
 
-		for (var zCircle = -radius; zCircle <= radius; zCircle++)
+		for (var zCircle = -radius; zCircle < radius; zCircle++)
 		{
-			for (var xCircle = -radius; xCircle <= radius; xCircle++)
+			for (var xCircle = -radius; xCircle < radius; xCircle++)
 			{
 				if (xCircle * xCircle + zCircle * zCircle < radius * radius)
 					result.Add(new XVec2I(chunkPosition.X + xCircle, chunkPosition.Z + zCircle));
@@ -202,4 +208,15 @@ public class XTerrainGenerator : MonoBehaviour {
 
 		return 0;
 	}
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="worldPosition"></param>
+    /// <returns></returns>
+    public XTerrainChunk    GetTerrainChunk(Vector3 worldPosition)
+    {
+        XVec2I chunkPosition = GetChunkPosition(worldPosition);
+        return Cache.GetGeneratedChunk(chunkPosition);
+    }
 }

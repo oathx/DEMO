@@ -12,7 +12,7 @@ class XTerrainGeneratorInspector : Editor
     private XTerrainGenerator                   instance;
     private XTerrainChunkSetting                setting;
     private UnityEngine.SceneManagement.Scene   scene;
-
+    private string                              assetSavePath;
     void OnEnable()
     {
         scene = UnityEditor.SceneManagement.EditorSceneManager.GetActiveScene();
@@ -23,23 +23,57 @@ class XTerrainGeneratorInspector : Editor
 
         instance = target as XTerrainGenerator;
 
-        if (!instance.Setting)
+        string settingPath = AssetDatabase.GetAssetPath(instance.Setting);
+        if (string.IsNullOrEmpty(settingPath))
         {
-            instance.Setting = ScriptableObject.CreateInstance<XTerrainChunkSetting>();
+            int iPathEnds = scene.path.LastIndexOf('/');
+            assetSavePath = Path.Combine(scene.path.Substring(0, iPathEnds),
+                    scene.name + typeof(XTerrainChunkSetting).Name + ".asset");
+
+            instance.Setting = AssetDatabase.LoadAssetAtPath<XTerrainChunkSetting>(assetSavePath);
+            if (!instance.Setting)
+            {
+                instance.Setting = ScriptableObject.CreateInstance<XTerrainChunkSetting>();
+                AssetDatabase.CreateAsset(instance.Setting, 
+                    assetSavePath);
+            }
         }
+        else
+        {
+            assetSavePath = AssetDatabase.GetAssetPath(instance.Setting);
+            if (!string.IsNullOrEmpty(assetSavePath))
+            {
+                instance.Setting = AssetDatabase.LoadAssetAtPath<XTerrainChunkSetting>(assetSavePath);
+            }
+        }
+
+        setting = instance.Setting;
     }
 
     void OnDisable()
     {
 		setting = instance.Setting;
+
+        EditorUtility.SetDirty(setting);
+        AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
     }
 
     public override void OnInspectorGUI()
     {
-        if (GUILayout.Button("Reset"))
+        if (GUILayout.Button("Save"))
         {
-            
+            setting = instance.Setting;
+
+            if (!Application.isPlaying)
+                UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(scene);
+
+            EditorUtility.SetDirty(setting);
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
         }
+
+        instance.Setting = (XTerrainChunkSetting)EditorGUILayout.ObjectField("ConfigAsset : ", instance.Setting, typeof(XTerrainChunkSetting));
 
         if (EditorHelper.DrawHeader("Terrain"))
         {
@@ -50,7 +84,6 @@ class XTerrainGeneratorInspector : Editor
             instance.Setting.Length                 = EditorGUILayout.IntField("Length", instance.Setting.Length);
             instance.Setting.Height                 = EditorGUILayout.IntField("Height", instance.Setting.Height);
             
-
             EditorHelper.EndContents();
         }
 
@@ -99,6 +132,8 @@ class XTerrainGeneratorInspector : Editor
     
             EditorHelper.EndContents();
         }
+
+        EditorUtility.SetDirty(target);
     }
 }
 

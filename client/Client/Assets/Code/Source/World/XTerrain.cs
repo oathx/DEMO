@@ -146,7 +146,7 @@ public class XTerrainChunk {
 	{
 		lock (HeightmapThread)
 		{
-            Heightmap = NoiseProvider.GetHeightmapData(Setting.HeightmapResolution, Setting.HeightmapResolution, Position.X, Position.Z);
+            Heightmap = NoiseProvider.GetHeightmapData();
 
             if (Setting.Trees.Count > 0)
             {

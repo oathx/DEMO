@@ -11,55 +11,64 @@ public enum XNoiseType {
 
 [CustomLuaClass]
 public class XTerrainGenerator : MonoBehaviour {
-	public Material 				TerrainMaterial;
-    public List<Texture2D>          Textures = new List<Texture2D>();
-    public List<GameObject>         Trees = new List<GameObject>();
-
-	public int 						HeightmapResolution;
-	public int 						AlphamapResolution;
-	public int 						Length;
-	public int 						Height;
-    public XNoiseType               NoiseType = XNoiseType.NT_PERLIN;
-
 	/// <summary>
 	/// The settings.
 	/// </summary>
-	private XTerrainChunkSetting 	Settings;
-	private XNoise 					NoiseProvider;
+    [SerializeField]
+	public XTerrainChunkSetting 	Setting;
 
 	/// <summary>
 	/// The cache.
 	/// </summary>
-	private XTerrainChunkCache 		Cache;
+    public XTerrainChunkCache       Cache;
 
-	/// <summary>
-	/// Awake this instance.
-	/// </summary>
-	void Awake()
-	{
-		
-	}
+    /// <summary>
+    /// 
+    /// </summary>
+    public Transform                Center;
+
+    private bool                    canActivateCharacter;
+    private XVec2I                  centerChunkPosition;
+
+    /// <summary>
+    /// 
+    /// </summary>
+    void Awake()
+    {
+        canActivateCharacter = false;
+        InitGenerate();
+    }
+
+    void Start()
+    {
+        StartCoroutine(OnLoadWorld(delegate(XVec2I v)
+        {
+
+        }));
+    }
 
 	/// <summary>
 	/// Update this instance.
 	/// </summary>
 	void Update()
 	{
-        if (Input.GetMouseButtonDown(0))
+        if (canActivateCharacter && Center.gameObject.activeSelf)
         {
-            XTerrainChunk chunk = GetTerrainChunk(Camera.main.ScreenToWorldPoint(Input.mousePosition));
-            chunk.ReplaceTree();
+            XVec2I curChunkPosition = GetChunkPosition(Center.position);
+            if (!curChunkPosition.Equals(centerChunkPosition))
+            {
+                UpdateTerrain(Center.position, Setting.Raidus);
+                centerChunkPosition = curChunkPosition;
+            }
         }
 
-		Cache.Update();
+        Cache.Update();
 	}
 
 	/// <summary>
 	/// Inits the generate.
 	/// </summary>
 	public void 			InitGenerate(){
-        Settings        = new XTerrainChunkSetting(HeightmapResolution, AlphamapResolution, Length, Height, TerrainMaterial, Textures, Trees);
-        NoiseProvider   = new XNoiseDefault();
 		Cache 			= new XTerrainChunkCache();
 	}
 
@@ -72,42 +81,36 @@ public class XTerrainGenerator : MonoBehaviour {
 	{
 		if (Cache.ChunkCanBeAdded(x, z))
 		{
-            XNoise noise = null;
-            if (NoiseType == XNoiseType.NT_NONE)
-            {
-                noise = NoiseProvider;
-            }
-            else if (NoiseType == XNoiseType.NT_PERLIN)
-            {
-                noise = new XNoisePerlin();
-                if (x > 0)
-                {
-                    int offset = (noise.bottom - noise.top) * x;
-                    noise.top = noise.top + offset;
-                    noise.bottom = noise.bottom + offset;
-                }
-                else
-                {
-                    int offset = (noise.bottom - noise.top) * x;
-                    noise.top = noise.top + offset;
-                    noise.bottom = noise.bottom + offset;
-                }
+            XNoisePerlin noise = new XNoisePerlin(Setting.HeightmapResolution,
+               Setting.AlphamapResolution, x, z, Setting.Left, Setting.Right, Setting.Top, Setting.Bottom);
 
-                if (z > 0)
-                {
-                    int offset = (noise.right - noise.left) * z;
-                    noise.left = noise.left + offset;
-                    noise.right = noise.right + offset;
-                }
-                else
-                {
-                    int offset = (noise.right - noise.left) * z;
-                    noise.left = noise.left + offset;
-                    noise.right = noise.right + offset;
-                }
+            if (x > 0)
+            {
+                int offset = (noise.bottom - noise.top) * x;
+                noise.top = noise.top + offset;
+                noise.bottom = noise.bottom + offset;
+            }
+            else
+            {
+                int offset = (noise.bottom - noise.top) * x;
+                noise.top = noise.top + offset;
+                noise.bottom = noise.bottom + offset;
             }
 
-            var chunk = new XTerrainChunk(Settings, noise, x, z);
+            if (z > 0)
+            {
+                int offset = (noise.right - noise.left) * z;
+                noise.left = noise.left + offset;
+                noise.right = noise.right + offset;
+            }
+            else
+            {
+                int offset = (noise.right - noise.left) * z;
+                noise.left = noise.left + offset;
+                noise.right = noise.right + offset;
+            }
+
+            var chunk = new XTerrainChunk(Setting, noise, x, z);
             Cache.AddNewChunk(chunk);
 		}
 	}
@@ -177,8 +180,8 @@ public class XTerrainGenerator : MonoBehaviour {
 	/// <param name="worldPosition">World position.</param>
 	public XVec2I 			GetChunkPosition(Vector3 worldPosition)
 	{
-		int x = (int)Mathf.Floor(worldPosition.x / Settings.Length);
-		int z = (int)Mathf.Floor(worldPosition.z / Settings.Length);
+        int x = (int)Mathf.Floor(worldPosition.x / Setting.Length);
+        int z = (int)Mathf.Floor(worldPosition.z / Setting.Length);
 
 		return new XVec2I(x, z);
 	}
@@ -218,5 +221,43 @@ public class XTerrainGenerator : MonoBehaviour {
     {
         XVec2I chunkPosition = GetChunkPosition(worldPosition);
         return Cache.GetGeneratedChunk(chunkPosition);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="complate"></param>
+    /// <returns></returns>
+    IEnumerator             OnLoadWorld(System.Action<XVec2I> complate)
+    {
+        if (!Center)
+        {
+            GameObject orgin = new GameObject();
+            orgin.transform.position = Vector3.zero;
+            Center = orgin.transform;
+        }
+
+        InitGenerate();
+        UpdateTerrain(Center.position, Setting.Raidus);
+
+        do
+        {
+            var exists = IsTerrainAvailable(Center.position);
+            if (exists)
+                canActivateCharacter = true;
+            yield return null;
+
+        } while (!canActivateCharacter);
+
+        centerChunkPosition = GetChunkPosition(Center.position);
+        Center.position = new Vector3(Center.position.x,
+            GetTerrainHeight(Center.position) + 0.5f, Center.position.z);
+
+        Center.gameObject.SetActive(true);
+
+        if (complate != null)
+        {
+            complate(centerChunkPosition);
+        }
     }
 }

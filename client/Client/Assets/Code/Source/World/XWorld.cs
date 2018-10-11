@@ -49,13 +49,6 @@ public class XWorld : MonoBehaviour {
 	void Awake() {
 		CanActivateCharacter 	= false;
 		radius 					= 2;
-
-        if (!center)
-        {
-            GameObject defaultCenterTrans = new GameObject();
-            defaultCenterTrans.transform.position = Vector3.zero;
-            center = defaultCenterTrans.transform;
-        }
 	}
 
     /// <summary>
@@ -90,21 +83,28 @@ public class XWorld : MonoBehaviour {
 	/// <param name="radius">Radius.</param>
 	/// <param name="complate">Complate.</param>
 	IEnumerator OnLoadWorld(System.Action<XVec2I> complate) {
+        if (!center)
+        {
+            GameObject orgin            = new GameObject();
+            orgin.transform.position    = Vector3.zero;
+            center                      = orgin.transform;
+        }
+
 		generator.InitGenerate ();
-		generator.UpdateTerrain(center.position, radius);
+        generator.UpdateTerrain(center.position, radius);
 
 		do
 		{
-			var exists = generator.IsTerrainAvailable(center.position);
+            var exists = generator.IsTerrainAvailable(center.position);
 			if (exists)
 				CanActivateCharacter = true;
 			yield return null;
 
 		} while (!CanActivateCharacter);
 
-		centerChunkPosition = generator.GetChunkPosition(center.position);
-		center.position = new Vector3(center.position.x, 
-			generator.GetTerrainHeight(center.position) + 0.5f, center.position.z);
+        centerChunkPosition = generator.GetChunkPosition(center.position);
+        center.position = new Vector3(center.position.x,
+            generator.GetTerrainHeight(center.position) + 0.5f, center.position.z);
 
 		center.gameObject.SetActive(true);
 

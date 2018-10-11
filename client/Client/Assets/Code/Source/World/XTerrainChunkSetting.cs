@@ -6,74 +6,64 @@ using System.Collections.Generic;
 /// <summary>
 /// terrain chunk setting.
 /// </summary>
+[System.Serializable]
 [CustomLuaClass]
 public class XTerrainChunkSetting : ScriptableObject {
 	/// <summary>
 	/// Gets the heightmap resolution.
 	/// </summary>
 	/// <value>The heightmap resolution.</value>
-	public int 			HeightmapResolution 
-	{ get; private set; }
+	public int 			    HeightmapResolution = 65;
+
 
 	/// <summary>
 	/// Gets the alphamap resolution.
 	/// </summary>
 	/// <value>The alphamap resolution.</value>
-	public int 			AlphamapResolution 
-	{ get; private set; }
+	public int 			    AlphamapResolution = 65;
+
 
 	/// <summary>
 	/// Gets the length.
 	/// </summary>
 	/// <value>The length.</value>
-	public int 			Length 
-	{ get; private set; }
+	public int 			    Length = 40;
+	
 
 	/// <summary>
 	/// Gets the height.
 	/// </summary>
 	/// <value>The height.</value>
-	public int 			Height 
-	{ get; private set; }
-
-	/// <summary>
-	/// Gets the terrain material.
-	/// </summary>
-	/// <value>The terrain material.</value>
-	public Material 	TerrainMaterial 
-	{ get; private set; }
+	public int 			    Height = 10;
 
     /// <summary>
     /// 
     /// </summary>
-    public List<Texture2D> Textures
-    { get; private set; }
+    public int              Raidus = 2;
 
     /// <summary>
     /// 
     /// </summary>
-    public List<GameObject> Trees
-    { get; private set; }
+    public int              Left = 1;
+    public int              Right = 5;
+    public int              Top = 2;
+    public int              Bottom = 6;
 
-	/// <summary>
-	/// Initializes a new instance of the <see cref="XTerrainChunkSetting"/> class.
-	/// </summary>
-	/// <param name="heightmapResolution">Heightmap resolution.</param>
-	/// <param name="alphamapResolution">Alphamap resolution.</param>
-	/// <param name="length">Length.</param>
-	/// <param name="height">Height.</param>
-	/// <param name="flatTexture">Flat texture.</param>
-	/// <param name="steepTexture">Steep texture.</param>
-	/// <param name="terrainMaterial">Terrain material.</param>
-	public XTerrainChunkSetting(int heightmapResolution, int alphamapResolution,
-        int length, int height, Material terrainMaterial, List<Texture2D> textures, List<GameObject> trees)
-	{
-		HeightmapResolution = heightmapResolution;
-		AlphamapResolution 	= alphamapResolution;
-		Length 				= length;
-		Height 				= height;
-		TerrainMaterial 	= terrainMaterial;
-        Textures            = textures;
-        Trees               = trees;
-	}
+    /// <summary>
+    /// Gets the terrain material.
+    /// </summary>
+    /// <value>The terrain material.</value>
+    public Material         TerrainMaterial;
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public List<Texture2D>  Textures = new List<Texture2D>();
+  
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public List<GameObject> Trees = new List<GameObject>();
+ 
 }

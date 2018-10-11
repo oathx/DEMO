@@ -148,35 +148,35 @@ public class XTerrainChunk {
 		{
             Heightmap = NoiseProvider.GetHeightmapData();
 
-            if (Setting.Trees.Count > 0)
-            {
-                for (var zRes = 0; zRes < Setting.HeightmapResolution; zRes++)
-                {
-                    for (var xRes = 0; xRes < Setting.HeightmapResolution; xRes++)
-                    {
-                        int height = Mathf.FloorToInt(Heightmap[zRes, xRes] * 100);
-                        if (height > 30 && zRes % 20 == 0 && xRes % 20 == 0)
-                        {
-                            var xCoordinate = (float)xRes / (Setting.HeightmapResolution - 1);
-                            var zCoordinate = (float)zRes / (Setting.HeightmapResolution - 1);
+            //if (Setting.Trees.Count > 0)
+            //{
+            //    for (var zRes = 0; zRes < Setting.HeightmapResolution; zRes++)
+            //    {
+            //        for (var xRes = 0; xRes < Setting.HeightmapResolution; xRes++)
+            //        {
+            //            int height = Mathf.FloorToInt(Heightmap[zRes, xRes] * 100);
+            //            if (height > 30 && zRes % 20 == 0 && xRes % 20 == 0)
+            //            {
+            //                var xCoordinate = (float)xRes / (Setting.HeightmapResolution - 1);
+            //                var zCoordinate = (float)zRes / (Setting.HeightmapResolution - 1);
 
-                            Vector3 point = new Vector3(xCoordinate, zCoordinate, height);
-                            TreePoint.Add(point);
-                        }
-                        else
-                        {
-                            if (height == 0 && zRes % 10 == 0 && xRes % 10 == 0)
-                            {
-                                var xCoordinate = (float)xRes / (Setting.HeightmapResolution - 1);
-                                var zCoordinate = (float)zRes / (Setting.HeightmapResolution - 1);
+            //                Vector3 point = new Vector3(xCoordinate, zCoordinate, height);
+            //                TreePoint.Add(point);
+            //            }
+            //            else
+            //            {
+            //                if (height == 0 && zRes % 10 == 0 && xRes % 10 == 0)
+            //                {
+            //                    var xCoordinate = (float)xRes / (Setting.HeightmapResolution - 1);
+            //                    var zCoordinate = (float)zRes / (Setting.HeightmapResolution - 1);
 
-                                Vector3 point = new Vector3(xCoordinate, zCoordinate, height);
-                                ChopPoint.Add(point);
-                            }
-                        }
-                    }
-                }
-            }
+            //                    Vector3 point = new Vector3(xCoordinate, zCoordinate, height);
+            //                    ChopPoint.Add(point);
+            //                }
+            //            }
+            //        }
+            //    }
+            //}
 		}
 	}
 
@@ -253,64 +253,64 @@ public class XTerrainChunk {
     /// <param name="terrainData"></param>
     private void ApplyTrees(TerrainData terrainData)
     {
-        if (Setting.Trees.Count > 0)
-        {
+        //if (Setting.Trees.Count > 0)
+        //{
             
-            int maxCounts = 5;
-            int treeIndex = Random.Range(0, Setting.Trees.Count - 1);
-            for (int i = 0; i < ChopPoint.Count; i++)
-            {
-                Vector3 treePoint = ChopPoint[i];
+        //    int maxCounts = 5;
+        //    int treeIndex = Random.Range(0, Setting.Trees.Count - 1);
+        //    for (int i = 0; i < ChopPoint.Count; i++)
+        //    {
+        //        Vector3 treePoint = ChopPoint[i];
                 
-                for (int j = 0; j < maxCounts; j++)
-                {
-                    Vector3 random = new Vector3(Random.Range(treePoint.x - 0.1f, treePoint.x + 0.1f),
-                        -0.1f, Random.Range(treePoint.y - 0.1f, treePoint.y + 0.1f));
+        //        for (int j = 0; j < maxCounts; j++)
+        //        {
+        //            Vector3 random = new Vector3(Random.Range(treePoint.x - 0.1f, treePoint.x + 0.1f),
+        //                -0.1f, Random.Range(treePoint.y - 0.1f, treePoint.y + 0.1f));
 
-                    Vector3 position = Vector3.Scale(random, TerrainChunk.terrainData.size) + TerrainChunk.transform.position;
-                    position.y = TerrainChunk.SampleHeight(position);
+        //            Vector3 position = Vector3.Scale(random, TerrainChunk.terrainData.size) + TerrainChunk.transform.position;
+        //            position.y = TerrainChunk.SampleHeight(position);
 
-                    GameObject tree = GameObject.Instantiate(Setting.Trees[treeIndex]);
-                    tree.transform.position = position;
-                    tree.transform.parent = TerrainChunk.transform;
-                }
-            }
+        //            GameObject tree = GameObject.Instantiate(Setting.Trees[treeIndex]);
+        //            tree.transform.position = position;
+        //            tree.transform.parent = TerrainChunk.transform;
+        //        }
+        //    }
 
             
-            List<TreePrototype> trees = new List<TreePrototype>();
-            for (int i = 0; i < Setting.Trees.Count; i++)
-            {
-                TreePrototype tree = new TreePrototype();
-                tree.prefab = Setting.Trees[i];
+        //    List<TreePrototype> trees = new List<TreePrototype>();
+        //    for (int i = 0; i < Setting.Trees.Count; i++)
+        //    {
+        //        TreePrototype tree = new TreePrototype();
+        //        tree.prefab = Setting.Trees[i];
 
-                trees.Add(tree);
-            }
+        //        trees.Add(tree);
+        //    }
 
-            terrainData.treePrototypes = trees.ToArray();
+        //    terrainData.treePrototypes = trees.ToArray();
 
-            for (int i = 0; i < TreePoint.Count; i++)
-            {
-                Vector3 vpos = TreePoint[i];
+        //    for (int i = 0; i < TreePoint.Count; i++)
+        //    {
+        //        Vector3 vpos = TreePoint[i];
           
-                for (int j = 0; j < 10; j++)
-                {
-                    TreeInstance tmpTreeInstances = new TreeInstance();
-                    tmpTreeInstances.prototypeIndex = 3;
-                    tmpTreeInstances.position = new Vector3(Random.Range(vpos.x - 0.1f, vpos.x + 0.1f), -0.1f, Random.Range(vpos.y - 0.1f, vpos.y + 0.1f));
-                    tmpTreeInstances.color = new Color(1, 1, 1, 1);
-                    tmpTreeInstances.lightmapColor = new Color(1, 1, 1, 1);
+        //        for (int j = 0; j < 10; j++)
+        //        {
+        //            TreeInstance tmpTreeInstances = new TreeInstance();
+        //            tmpTreeInstances.prototypeIndex = 3;
+        //            tmpTreeInstances.position = new Vector3(Random.Range(vpos.x - 0.1f, vpos.x + 0.1f), -0.1f, Random.Range(vpos.y - 0.1f, vpos.y + 0.1f));
+        //            tmpTreeInstances.color = new Color(1, 1, 1, 1);
+        //            tmpTreeInstances.lightmapColor = new Color(1, 1, 1, 1);
 
-                    float scale = Random.Range(0.8f, 1f);
-                    tmpTreeInstances.heightScale = scale;
-                    tmpTreeInstances.widthScale = scale;
-                    TerrainChunk.AddTreeInstance(tmpTreeInstances);
-                }
-            }
+        //            float scale = Random.Range(0.8f, 1f);
+        //            tmpTreeInstances.heightScale = scale;
+        //            tmpTreeInstances.widthScale = scale;
+        //            TerrainChunk.AddTreeInstance(tmpTreeInstances);
+        //        }
+        //    }
 
-            TerrainCollider tc = TerrainChunk.GetComponent<TerrainCollider>();
-            tc.enabled = false;
-            tc.enabled = true;
-        }
+        //    TerrainCollider tc = TerrainChunk.GetComponent<TerrainCollider>();
+        //    tc.enabled = false;
+        //    tc.enabled = true;
+        //}
     }
 
     public void ReplaceTree()

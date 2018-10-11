@@ -64,6 +64,15 @@ public class XNoisePerlin : XNoise
 
 	}
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
+    public Perlin           GetPerlin()
+    {
+        return perlinNoiseGenerator;
+    }
+
 	/// <summary>
 	/// Gets the height map data.
 	/// </summary>

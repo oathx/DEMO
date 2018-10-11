@@ -49,6 +49,12 @@ public class XTerrainChunkSetting : ScriptableObject {
     public int              Top = 2;
     public int              Bottom = 6;
 
+    public int              OctaveCount = 6;
+
+    public float            Frequency = 1.0f;
+    public float            Lacunarity = 2.0f;
+    public float            Persistence = 0.5f;
+
     /// <summary>
     /// Gets the terrain material.
     /// </summary>
@@ -64,6 +70,6 @@ public class XTerrainChunkSetting : ScriptableObject {
     /// <summary>
     /// 
     /// </summary>
-    public List<GameObject> Trees = new List<GameObject>();
+    //public List<GameObject> Trees = new List<GameObject>();
  
 }

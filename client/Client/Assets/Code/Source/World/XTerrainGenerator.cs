@@ -3,18 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using SLua;
-
-public enum XNoiseType {
-    NT_NONE = 0,
-    NT_PERLIN = 1,
-};
+using LibNoise;
+using LibNoise.Generator;
+using LibNoise.Operator;
 
 [CustomLuaClass]
 public class XTerrainGenerator : MonoBehaviour {
 	/// <summary>
 	/// The settings.
 	/// </summary>
-    [SerializeField]
 	public XTerrainChunkSetting 	Setting;
 
 	/// <summary>
@@ -83,6 +80,12 @@ public class XTerrainGenerator : MonoBehaviour {
 		{
             XNoisePerlin noise = new XNoisePerlin(Setting.HeightmapResolution,
                Setting.AlphamapResolution, x, z, Setting.Left, Setting.Right, Setting.Top, Setting.Bottom);
+
+            Perlin perlin       = noise.GetPerlin();
+            perlin.Frequency    = Setting.Frequency;
+            perlin.OctaveCount  = Setting.OctaveCount;
+            perlin.Persistence  = Setting.Persistence;
+            perlin.Lacunarity   = Setting.Lacunarity;
 
             if (x > 0)
             {

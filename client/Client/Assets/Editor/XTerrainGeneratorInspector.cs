@@ -15,44 +15,46 @@ class XTerrainGeneratorInspector : Editor
     private string                              assetSavePath;
     void OnEnable()
     {
-        scene = UnityEditor.SceneManagement.EditorSceneManager.GetActiveScene();
-        if (!Application.isPlaying)
-        {
-            UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(scene);
-        }
-
         instance = target as XTerrainGenerator;
-
-        string settingPath = AssetDatabase.GetAssetPath(instance.Setting);
-        if (string.IsNullOrEmpty(settingPath))
+        if (instance)
         {
-            int iPathEnds = scene.path.LastIndexOf('/');
-            assetSavePath = Path.Combine(scene.path.Substring(0, iPathEnds),
-                    scene.name + typeof(XTerrainChunkSetting).Name + ".asset");
-
-            instance.Setting = AssetDatabase.LoadAssetAtPath<XTerrainChunkSetting>(assetSavePath);
-            if (!instance.Setting)
+            scene = UnityEditor.SceneManagement.EditorSceneManager.GetActiveScene();
+            if (!Application.isPlaying)
             {
-                instance.Setting = ScriptableObject.CreateInstance<XTerrainChunkSetting>();
-                AssetDatabase.CreateAsset(instance.Setting, 
-                    assetSavePath);
+                UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(scene);
             }
-        }
-        else
-        {
-            assetSavePath = AssetDatabase.GetAssetPath(instance.Setting);
-            if (!string.IsNullOrEmpty(assetSavePath))
+
+            string settingPath = AssetDatabase.GetAssetPath(instance.Setting);
+            if (string.IsNullOrEmpty(settingPath))
             {
+                int iPathEnds = scene.path.LastIndexOf('/');
+                assetSavePath = Path.Combine(scene.path.Substring(0, iPathEnds),
+                        scene.name + typeof(XTerrainChunkSetting).Name + ".asset");
+
                 instance.Setting = AssetDatabase.LoadAssetAtPath<XTerrainChunkSetting>(assetSavePath);
+                if (!instance.Setting)
+                {
+                    instance.Setting = ScriptableObject.CreateInstance<XTerrainChunkSetting>();
+                    AssetDatabase.CreateAsset(instance.Setting,
+                        assetSavePath);
+                }
             }
-        }
+            else
+            {
+                assetSavePath = AssetDatabase.GetAssetPath(instance.Setting);
+                if (!string.IsNullOrEmpty(assetSavePath))
+                {
+                    instance.Setting = AssetDatabase.LoadAssetAtPath<XTerrainChunkSetting>(assetSavePath);
+                }
+            }
 
-        setting = instance.Setting;
+            setting = instance.Setting;
+        }
     }
 
     void OnDisable()
     {
-		setting = instance.Setting;
+        setting = instance.Setting;
 
         EditorUtility.SetDirty(setting);
         AssetDatabase.SaveAssets();
@@ -79,11 +81,11 @@ class XTerrainGeneratorInspector : Editor
         {
             EditorHelper.BeginContents();
 
-            instance.Setting.HeightmapResolution    = EditorGUILayout.IntField("HeightmapResolution", instance.Setting.HeightmapResolution);
-            instance.Setting.AlphamapResolution     = EditorGUILayout.IntField("AlphamapResolution", instance.Setting.AlphamapResolution);
-            instance.Setting.Length                 = EditorGUILayout.IntField("Length", instance.Setting.Length);
-            instance.Setting.Height                 = EditorGUILayout.IntField("Height", instance.Setting.Height);
-            
+            instance.Setting.HeightmapResolution = EditorGUILayout.IntField("HeightmapResolution", instance.Setting.HeightmapResolution);
+            instance.Setting.AlphamapResolution = EditorGUILayout.IntField("AlphamapResolution", instance.Setting.AlphamapResolution);
+            instance.Setting.Length = EditorGUILayout.IntField("Length", instance.Setting.Length);
+            instance.Setting.Height = EditorGUILayout.IntField("Height", instance.Setting.Height);
+
             EditorHelper.EndContents();
         }
 
@@ -91,10 +93,15 @@ class XTerrainGeneratorInspector : Editor
         {
             EditorHelper.BeginContents();
 
-            instance.Setting.Left   = EditorGUILayout.IntField("Left", instance.Setting.Left);
-            instance.Setting.Right  = EditorGUILayout.IntField("Right", instance.Setting.Right);
-            instance.Setting.Top    = EditorGUILayout.IntField("Top", instance.Setting.Top);
+            instance.Setting.Left = EditorGUILayout.IntField("Left", instance.Setting.Left);
+            instance.Setting.Right = EditorGUILayout.IntField("Right", instance.Setting.Right);
+            instance.Setting.Top = EditorGUILayout.IntField("Top", instance.Setting.Top);
             instance.Setting.Bottom = EditorGUILayout.IntField("Bottom", instance.Setting.Bottom);
+
+            instance.Setting.OctaveCount = EditorGUILayout.IntField("OctaveCount", instance.Setting.OctaveCount);
+            instance.Setting.Frequency = EditorGUILayout.FloatField("Frequency", instance.Setting.Frequency);
+            instance.Setting.Lacunarity = EditorGUILayout.FloatField("Lacunarity", instance.Setting.Lacunarity);
+            instance.Setting.Persistence = EditorGUILayout.FloatField("Persistence", instance.Setting.Persistence);
 
             EditorHelper.EndContents();
         }
@@ -102,11 +109,11 @@ class XTerrainGeneratorInspector : Editor
         if (EditorHelper.DrawHeader("Chunk"))
         {
             EditorHelper.BeginContents();
-            instance.Setting.TerrainMaterial    = (Material)EditorGUILayout.ObjectField("TerrainMaterial", 
+            instance.Setting.TerrainMaterial = (Material)EditorGUILayout.ObjectField("TerrainMaterial",
                 instance.Setting.TerrainMaterial, typeof(Material));
-            instance.Setting.Raidus             = EditorGUILayout.IntField("Raidus", instance.Setting.Raidus);
-            instance.Center                     = (Transform)EditorGUILayout.ObjectField("Center",
-               instance.Center, typeof(Transform));
+            instance.Setting.Raidus = EditorGUILayout.IntField("Raidus", instance.Setting.Raidus);
+            instance.Center = (Transform)EditorGUILayout.ObjectField("Center",
+                instance.Center, typeof(Transform));
             EditorHelper.EndContents();
         }
 
@@ -114,22 +121,26 @@ class XTerrainGeneratorInspector : Editor
         {
             EditorHelper.BeginContents();
 
-            if (GUILayout.Button ("Add")) {
+            if (GUILayout.Button("Add"))
+            {
                 instance.Setting.Textures.Add(new Texture2D(512, 512));
             }
 
             for (int i = 0; i < instance.Setting.Textures.Count; i++)
             {
-                string name = string.Format("Layer [{0}] {1}x{1}", i, instance.Setting.Textures[i].width, instance.Setting.Textures[i].height);
-                instance.Setting.Textures[i] = (Texture2D)EditorGUILayout.ObjectField(name,
-                    instance.Setting.Textures[i], typeof(Texture2D));
+                if (instance.Setting.Textures[i] != null)
+                {
+                    string name = string.Format("Layer [{0}] {1}x{1}", i, instance.Setting.Textures[i].width, instance.Setting.Textures[i].height);
+                    instance.Setting.Textures[i] = (Texture2D)EditorGUILayout.ObjectField(name,
+                        instance.Setting.Textures[i], typeof(Texture2D));
+                }
             }
 
             if (GUILayout.Button("Remove"))
             {
                 instance.Setting.Textures.RemoveAt(instance.Setting.Textures.Count - 1);
             }
-    
+
             EditorHelper.EndContents();
         }
 

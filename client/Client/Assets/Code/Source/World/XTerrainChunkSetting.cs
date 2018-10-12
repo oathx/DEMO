@@ -70,6 +70,11 @@ public class XTerrainChunkSetting : ScriptableObject {
     /// <summary>
     /// 
     /// </summary>
-    //public List<GameObject> Trees = new List<GameObject>();
+    public List<GameObject> TreePrefabs = new List<GameObject>();
+
+    public int              StumpHeigt = 30;
+    public int              MaxStempCount = 10;
+    public int              StumpDensity = 20;
+    public int              TreeGenerateDensity = 5;
  
 }

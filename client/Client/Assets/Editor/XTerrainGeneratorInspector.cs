@@ -144,6 +144,37 @@ class XTerrainGeneratorInspector : Editor
             EditorHelper.EndContents();
         }
 
+        if (EditorHelper.DrawHeader("TreePrefabs"))
+        {
+            EditorHelper.BeginContents();
+            
+            instance.Setting.StumpHeigt = EditorGUILayout.IntField("StumpHeigt", instance.Setting.StumpHeigt);
+            instance.Setting.MaxStempCount = EditorGUILayout.IntField("MaxStempCount", instance.Setting.MaxStempCount);
+            instance.Setting.StumpDensity = EditorGUILayout.IntField("StumpDensity", instance.Setting.StumpDensity);
+            instance.Setting.TreeGenerateDensity = EditorGUILayout.IntField("TreeGenerateDensity", instance.Setting.TreeGenerateDensity);
+
+            if (GUILayout.Button("Add"))
+            {
+                instance.Setting.TreePrefabs.Add(new GameObject());
+            }
+
+            for (int i = 0; i < instance.Setting.TreePrefabs.Count; i++)
+            {
+                if (instance.Setting.TreePrefabs[i] != null)
+                {
+                    instance.Setting.TreePrefabs[i] = (GameObject)EditorGUILayout.ObjectField(instance.Setting.TreePrefabs[i].name,
+                        instance.Setting.TreePrefabs[i], typeof(GameObject));
+                }
+            }
+
+            if (GUILayout.Button("Remove"))
+            {
+                instance.Setting.TreePrefabs.RemoveAt(instance.Setting.TreePrefabs.Count - 1);
+            }
+
+            EditorHelper.EndContents();
+        }
+
         EditorUtility.SetDirty(target);
     }
 }

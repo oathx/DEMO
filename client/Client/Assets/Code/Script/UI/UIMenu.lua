@@ -96,7 +96,7 @@ function SetShapeURL(self, url, shapeAssetUrl, complete)
 
 				ShaderEffect.Dissolve(DissolveType.DT_NORMAL, 
 					res.Table, obj, 3, true, function() end)
-
+				
 				if complete then
 					complete(obj)
 				end

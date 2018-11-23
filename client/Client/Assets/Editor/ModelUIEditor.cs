@@ -30,7 +30,7 @@ public class ModelUIXmlEditor : EditorWindow
 		Position, Scale, Angle, Select	
 	}
 
-	static string AssetSavePath = "Assets/Resources/ShapeAssetObject";
+	static string AssetSavePath = "Assets/Resources/ScriptAssetObject/Hero";
 
 	/// <summary>
 	/// Creates the xml editor.
@@ -173,7 +173,7 @@ public class ModelUIXmlEditor : EditorWindow
 			m_goModel.transform.localScale		= EditorGUILayout.Vector3Field (World.Scale.ToString(), 	m_goModel.transform.localScale);
 
 			if (GUILayout.Button ("Build")) {
-				ShapeAssetObject asset = ScriptableObject.CreateInstance<ShapeAssetObject> ();
+				XShapeAssetObject asset = ScriptableObject.CreateInstance<XShapeAssetObject> ();
 				if (asset) {
 					asset.LocalPosition = m_goModel.transform.localPosition;
 					asset.LocalAngle 	= m_goModel.transform.eulerAngles;

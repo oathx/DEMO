@@ -43,9 +43,9 @@ function OnLoginEvent(self, evtArgs)
 			UISystem.GetSingleton():MessageBox(UIStyle.PROMPT, text)
 		end
 	else
-		local flag = TcpServer.GetSingleton():Connected()
+		local flag = XTcpServer.GetSingleton():Connected()
 		if not flag then
-			TcpServer.GetSingleton():Connect()
+			XTcpServer.GetSingleton():Connect()
 
 			self.checkTimerID = LuaTimer.Add(1000, function()
 				Rpc:checkIn({

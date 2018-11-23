@@ -13,7 +13,7 @@ public enum DissolveType{
 /// Shader effect.
 /// </summary>
 [CustomLuaClass]
-public class ShaderEffect
+public class XShaderEffect
 {
 	/// <summary>
 	/// Dissolve the specified mats, go, fDuration, bIn and complete.

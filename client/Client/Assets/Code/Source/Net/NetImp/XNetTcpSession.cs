@@ -39,7 +39,7 @@ public class NetTcpStateObject
 /// Net tcp session.
 /// </summary>
 [CustomLuaClass]
-public class NetTcpSession : INetSession
+public class XNetTcpSession : INetSession
 {
 	/// <summary>
 	/// The socket.

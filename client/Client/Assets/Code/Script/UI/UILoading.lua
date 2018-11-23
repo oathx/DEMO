@@ -26,7 +26,7 @@ end
 -- function Start(self)
 -- 	local rectTrans = self:GetRectTransform(UL_PROC)
 -- 	if rectTrans then
--- 		local tween = StaticDOTween.DOLocalRotate(rectTrans, Vector3(0, 0, 360), 1, XRotateMode.LocalAxisAdd)
+-- 		local tween = XStaticDOTween.DOLocalRotate(rectTrans, Vector3(0, 0, 360), 1, XRotateMode.LocalAxisAdd)
 -- 		if tween then
 -- 			tween:SetLoops(-1, XLoopType.Incremental)
 -- 		end

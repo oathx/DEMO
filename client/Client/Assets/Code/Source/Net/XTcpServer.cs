@@ -25,18 +25,18 @@ public class TcpServerConfig {
 /// Net server.
 /// </summary>
 [CustomLuaClass]
-public class TcpServer
+public class XTcpServer
 {
 	/// <summary>
 	/// The instance.
 	/// </summary>
-	private static readonly TcpServer instance = new TcpServer();
+    private static readonly XTcpServer instance = new XTcpServer();
 
 	/// <summary>
 	/// Gets the singleton.
 	/// </summary>
 	/// <returns>The singleton.</returns>
-	public static TcpServer GetSingleton()
+    public static XTcpServer GetSingleton()
 	{
 		return instance;
 	}
@@ -54,7 +54,7 @@ public class TcpServer
 	public virtual void 	Initliaze()
 	{
 		if (session == null) {
-			session = new NetTcpSession ();
+			session = new XNetTcpSession ();
 		}		
 	}
 
@@ -121,7 +121,7 @@ public class TcpServer
 		}
 	}
 
-	public virtual void 	Send(NetLuaPacket packet)
+	public virtual void 	Send(XNetLuaPacket packet)
 	{
 		Send (packet.Data);
 	}
@@ -140,7 +140,7 @@ public class TcpServer
 	/// Post the specified packet.
 	/// </summary>
 	/// <param name="packet">Packet.</param>
-	public virtual void 	Post(NetLuaPacket packet)
+	public virtual void 	Post(XNetLuaPacket packet)
 	{
 		Post (packet.Data);	
 	}
@@ -161,7 +161,7 @@ public class TcpServer
 				}
 
 				if (packet != null) {
-					netFunc.call (new NetLuaPacket (packet));	
+					netFunc.call (new XNetLuaPacket (packet));	
 				}
 			}
 		}

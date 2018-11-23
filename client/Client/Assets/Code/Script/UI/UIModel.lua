@@ -37,7 +37,7 @@ function SetURL(self, url, layer, complete)
         GameObject.Destroy(self.model)
     end
 
-    ResourceManager.GetSingleton():LoadAsync(url, GameObject, function(obj) 
+    XResourceManager.GetSingleton():LoadAsync(url, Object, function(obj) 
         self.model = GameObject.Instantiate(obj)
         if self.model then
 			self:Invalidate(self.model, layer)

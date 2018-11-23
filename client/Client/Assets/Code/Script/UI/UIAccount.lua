@@ -24,7 +24,7 @@ end
 function DOScale(self)
     self.gameObject.transform.localScale = Vector3.one * 0.6
 
-    local tween = StaticDOTween.DOScale(self.gameObject.transform, 0.8, 0.5)
+    local tween = XStaticDOTween.DOScale(self.gameObject.transform, 0.8, 0.5)
     if tween then
         
     end

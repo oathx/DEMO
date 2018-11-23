@@ -52,7 +52,7 @@ local function _make(rpc, name, ...)
 --        error(string.format("expected %d arguments, but passed in %d",#rf.args,#arg))
     end
     
-    local packet = NetLuaPacket(rf.id)
+    local packet = XNetLuaPacket(rf.id)
 
     for i, v in ipairs(arg) do
         local t = rf.args[i].t
@@ -215,7 +215,7 @@ local function _parse_tcp_server(rpc)
             end
         end
 
-        TcpServer.GetSingleton():Startup(tcp)
+        XTcpServer.GetSingleton():Startup(tcp)
     else
         ELOG("_parse_tcp_server error, can't find local config")
     end
@@ -233,7 +233,7 @@ local mt = {
     __index = function( table, key )
         return function(rpc, ...)
             local packet = rpc:Make(key,...)
-            TcpServer.GetSingleton():Send(packet)
+            XTcpServer.GetSingleton():Send(packet)
         end
     end
 }

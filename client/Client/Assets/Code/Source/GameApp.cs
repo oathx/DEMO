@@ -36,7 +36,7 @@ public class GameApp : MonoBehaviour
 	// Use this for initialization
 	void Start () 
 	{
-		TcpServer.GetSingleton().Initliaze();
+		XTcpServer.GetSingleton().Initliaze();
 
 		InitSlua (delegate(int progress) {
 			GameObject.DontDestroyOnLoad (gameObject);
@@ -45,7 +45,7 @@ public class GameApp : MonoBehaviour
 
 	void FixedUpdate()
 	{
-		TcpServer.GetSingleton ().Update ();
+        XTcpServer.GetSingleton().Update();
 	}
 
 	/// <summary>
@@ -53,7 +53,7 @@ public class GameApp : MonoBehaviour
 	/// </summary>
 	void OnDestroy()
 	{
-		TcpServer.GetSingleton ().Shutdown ();
+        XTcpServer.GetSingleton().Shutdown();
 	}
 
 	/// <summary>

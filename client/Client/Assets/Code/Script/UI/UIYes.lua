@@ -27,7 +27,7 @@ function Awake(self)
 end
 
 function Start(self)
-    StaticDOTween.DOScaleV(
+    XStaticDOTween.DOScaleV(
         self.gameObject.transform, Vector3.one * 0.9, 0.5)
 
     self:RegisterClickEvent(UB_YES, OnYesClicked)

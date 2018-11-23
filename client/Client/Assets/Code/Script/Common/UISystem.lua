@@ -77,7 +77,7 @@ function LoadAsyncWidget(self, szResource, szModule, complete, cache)
 	else
 		local widget = self.widgets[name]
 		if not widget then
-			ResourceManager.GetSingleton():LoadAsync(szResource, GameObject, function(obj) 
+			XResourceManager.GetSingleton():LoadAsync(szResource, GameObject, function(obj) 
 				widget = self:CreateWidget(name, szResource, szModule, obj, cache)
 				
 				if complete then

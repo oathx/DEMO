@@ -5,7 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 [CustomLuaClass]
-public class ShapeAssetObject : ScriptableObject
+public class XShapeAssetObject : ScriptableObject
 {
 	public Vector3		LocalPosition = Vector3.zero;
 	public Vector3		LocalAngle = Vector3.zero;

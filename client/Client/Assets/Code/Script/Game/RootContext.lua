@@ -59,7 +59,7 @@ function LoadScene(self, nSceneID, complete)
 		if not prop then
 			ELOG("Can't find scene config (%d)", nSceneID)
 		else	
-			ResourceManager.GetSingleton():LoadScene(prop.Path, function(name)
+			XResourceManager.GetSingleton():LoadScene(prop.Path, function(name)
 				UISystem.GetSingleton():CloseWidget(UIStyle.LOADING)
 				
 				local obser

@@ -64,7 +64,7 @@ end
 function Close(self, compelte)
 	local group = self.gameObject:GetComponentInChildren(CanvasGroup)
 	if group then
-		StaticDOTween.DOFade(group, 0, 0.8)
+		XStaticDOTween.DOFade(group, 0, 0.8)
 	end
 	
 	local aryMove = {
@@ -81,7 +81,8 @@ function SetShapeURL(self, url, shapeAssetUrl, complete)
 			obj:SetActive(false)
 
 			if shapeAssetUrl then
-				ResourceManager.GetSingleton():LoadAsync(shapeAssetUrl, ShapeAssetObject, function(asset) 
+				ELOG(shapeAssetUrl)
+				XResourceManager.GetSingleton():LoadAsync(shapeAssetUrl, XShapeAssetObject, function(asset) 
 					obj.transform.localPosition 	= asset.LocalPosition
 					obj.transform.localScale 		= asset.LocalScale
 					obj.transform.eulerAngles 		= asset.LocalAngle
@@ -91,10 +92,10 @@ function SetShapeURL(self, url, shapeAssetUrl, complete)
 			local aryMatPath = {
 				resmng.Dissolve.Simple, resmng.Dissolve.Reflection
 			}
-			ResourceManager.GetSingleton():LoadMultiAsync(aryMatPath, Object, function(res)
+			XResourceManager.GetSingleton():LoadMultiAsync(aryMatPath, Object, function(res)
 				obj:SetActive(true)
 
-				ShaderEffect.Dissolve(DissolveType.DT_NORMAL, 
+				XShaderEffect.Dissolve(DissolveType.DT_NORMAL, 
 					res.Table, obj, 3, true, function() end)
 				
 				if complete then

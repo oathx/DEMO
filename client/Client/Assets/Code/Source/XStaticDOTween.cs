@@ -631,7 +631,7 @@ public class XTween
 }
 
 [CustomLuaClass]
-public class StaticDOTween
+public class XStaticDOTween
 {
 	public static XSequence Sequence()
 	{

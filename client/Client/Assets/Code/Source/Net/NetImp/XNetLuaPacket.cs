@@ -4,7 +4,7 @@ using System.Collections;
 using SLua;
 
 [CustomLuaClass]
-public class NetLuaPacket {
+public class XNetLuaPacket {
 	private INetPacket data = default(INetPacket);
 
 	[DoNotToLua]
@@ -13,11 +13,11 @@ public class NetLuaPacket {
 	}
 
 	[DoNotToLua]
-	public NetLuaPacket( INetPacket packet ) {
+	public XNetLuaPacket( INetPacket packet ) {
 		data = packet;
 	}
 
-	public NetLuaPacket( int packetType ) {
+	public XNetLuaPacket( int packetType ) {
 		data = new INetPacket( packetType );
 	}
 
@@ -112,7 +112,7 @@ public class NetLuaPacket {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	static public int ReadBlock(IntPtr l) {
 		try {
-			NetLuaPacket self=(NetLuaPacket)LuaObject.checkSelf(l);
+			XNetLuaPacket self=(XNetLuaPacket)LuaObject.checkSelf(l);
 			byte[] bytes = self.data.ReadBlock();
 			LuaObject.pushValue(l,true);
 			LuaDLL.lua_pushlstring(l, bytes, bytes.Length);
@@ -126,7 +126,7 @@ public class NetLuaPacket {
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	static public int WriteBlock(IntPtr l) {
 		try {
-			NetLuaPacket self=(NetLuaPacket)LuaObject.checkSelf(l);
+            XNetLuaPacket self = (XNetLuaPacket)LuaObject.checkSelf(l);
 			byte[] bytes = LuaDLL.lua_tobytes(l, 2);
 			self.data.WriteBlock(bytes);
 			LuaObject.pushValue(l,true);

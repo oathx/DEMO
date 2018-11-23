@@ -175,7 +175,7 @@ function DOCanvasGroupFade(self, from, to, duration, compelte)
 
 	self.canvasGroup.alpha = from
 	
-	local tween = StaticDOTween.DOFade(self.canvasGroup, to, duration)
+	local tween = XStaticDOTween.DOFade(self.canvasGroup, to, duration)
 	if tween then
 		tween:OnComplete(function() 
 			if compelte then
@@ -207,7 +207,7 @@ function DOGroupMove(self, aryConfig, compelte)
 
 			rectTrans.localPosition = curPos
 
-			local tween = StaticDOTween.DOLocalMove(rectTrans, newPos, cfg.speed, false)
+			local tween = XStaticDOTween.DOLocalMove(rectTrans, newPos, cfg.speed, false)
 			if tween then
 				tween:SetEase(XEase.Linear)
 				tween:SetDelay(cfg.wait or 0)
@@ -244,7 +244,7 @@ function DOBackMove(self, aryMove, flag, compelte)
 				fSpeed = 0.2				
 			end
 			
-			local tween = StaticDOTween.DOLocalMove(rectTrans, 
+			local tween = XStaticDOTween.DOLocalMove(rectTrans, 
 				newPos, idx * fSpeed, false)
 			if tween then
 				tween:SetEase(twEase)

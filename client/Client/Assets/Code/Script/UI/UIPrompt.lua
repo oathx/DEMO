@@ -26,7 +26,7 @@ function Start(self)
     local vStart    = self.transform.position
     local vEnd      = Vector3(vStart.x, vStart.y + 40, vStart.z)
     
-    local tween = StaticDOTween.DOMove(self.transform, vEnd, 1.5, false)
+    local tween = XStaticDOTween.DOMove(self.transform, vEnd, 1.5, false)
     if tween then
         tween:OnComplete(function() 
             GameObject.Destroy(self.gameObject)    

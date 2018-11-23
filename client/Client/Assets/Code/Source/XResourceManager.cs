@@ -5,25 +5,25 @@ using SLua;
 using UnityEngine.SceneManagement;
 
 [CustomLuaClass]
-public class ResourceManager : MonoBehaviour 
+public class XResourceManager : MonoBehaviour 
 {
 	/// <summary>
 	/// The instance.
 	/// </summary>
-	static ResourceManager			instance;
+    static XResourceManager instance;
 
 	/// <summary>
 	/// Gets the singleton.
 	/// </summary>
 	/// <returns>The singleton.</returns>
-	public static ResourceManager 	GetSingleton()
+    public static XResourceManager GetSingleton()
 	{
 		if (!instance) {
-			GameObject singleton = new GameObject (typeof(ResourceManager).Name);
+            GameObject singleton = new GameObject(typeof(XResourceManager).Name);
 			if (!singleton)
 				throw new System.NullReferenceException ();
 
-			instance = singleton.AddComponent<ResourceManager> ();
+            instance = singleton.AddComponent<XResourceManager>();
 
 			GameObject.DontDestroyOnLoad (singleton);
 		}

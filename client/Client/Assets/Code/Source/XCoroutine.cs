@@ -24,7 +24,7 @@ public class XCoroutine
     /// <returns></returns>
     public static Coroutine Run(IEnumerator function)
     {
-        if (core)
+        if (!core)
         {
             GameObject target = new GameObject(typeof(CoreCoroutine).Name);
 

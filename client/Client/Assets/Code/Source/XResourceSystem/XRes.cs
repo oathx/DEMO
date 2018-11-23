@@ -10,24 +10,43 @@ using UnityEditor;
 [CustomLuaClass]
 public static class XRes
 {
-    private static AsyncOperation _cleanupTask = null;
+	private static AsyncOperation cleanupTask = null;
 
+	/// <summary>
+	/// Starts the coroutine.
+	/// </summary>
+	/// <returns>The coroutine.</returns>
+	/// <param name="em">Em.</param>
     private static Coroutine StartCoroutine(IEnumerator em)
     {
         return XCoroutine.Run(em);
     }
 
+	/// <summary>
+	/// Find the specified path.
+	/// </summary>
+	/// <param name="path">Path.</param>
     private static Object Find(string path)
     {
         return null;
     }
 
+	/// <summary>
+	/// Load the specified path.
+	/// </summary>
+	/// <param name="path">Path.</param>
+	/// <typeparam name="T">The 1st type parameter.</typeparam>
     [DoNotToLua]
     public static T Load<T>(string path) where T : Object
     {
         return (Load(path, typeof(T)) as T);
     }
 
+	/// <summary>
+	/// Load the specified path and type.
+	/// </summary>
+	/// <param name="path">Path.</param>
+	/// <param name="type">Type.</param>
     [DoNotToLua]
     public static Object Load(string path, System.Type type)
     {
@@ -124,15 +143,37 @@ public static class XRes
         return obj;
     }
 
+	/// <summary>
+	/// Loads the async.
+	/// </summary>
+	/// <returns>The async.</returns>
+	/// <param name="path">Path.</param>
+	/// <param name="callback">Callback.</param>
+	/// <typeparam name="T">The 1st type parameter.</typeparam>
     public static Coroutine LoadAsync<T>(string path, System.Action<Object> callback) where T : Object
     {
         return LoadAsync(path, typeof(T), callback);
     }
+
+	/// <summary>
+	/// Loads the async.
+	/// </summary>
+	/// <returns>The async.</returns>
+	/// <param name="path">Path.</param>
+	/// <param name="type">Type.</param>
+	/// <param name="callback">Callback.</param>
     public static Coroutine LoadAsync(string path, System.Type type, System.Action<Object> callback)
     {
         return StartCoroutine(DoLoadAsync(path, type, callback));
     }
 
+	/// <summary>
+	/// Dos the load async.
+	/// </summary>
+	/// <returns>The load async.</returns>
+	/// <param name="path">Path.</param>
+	/// <param name="type">Type.</param>
+	/// <param name="callback">Callback.</param>
     private static IEnumerator DoLoadAsync(string path, System.Type type, System.Action<Object> callback)
     {
         if (string.IsNullOrEmpty(path))
@@ -251,6 +292,14 @@ public static class XRes
         callback(obj);
     }
 
+	/// <summary>
+	/// Loads the async.
+	/// </summary>
+	/// <returns>The async.</returns>
+	/// <param name="path">Path.</param>
+	/// <param name="type">Type.</param>
+	/// <param name="callback">Callback.</param>
+	/// <param name="param">Parameter.</param>
     private static Coroutine LoadAsync(string path, System.Type type, System.Action<Object, int> callback, int param)
     {
         return StartCoroutine(DoLoadAsync(path, type, delegate(Object obj)
@@ -259,11 +308,23 @@ public static class XRes
         }));
     }
 
+	/// <summary>
+	/// Loads the multi async.
+	/// </summary>
+	/// <returns>The multi async.</returns>
+	/// <param name="paths">Paths.</param>
+	/// <param name="callback">Callback.</param>
     public static Coroutine LoadMultiAsync(string[] paths, System.Action<Object[]> callback)
     {
         return StartCoroutine(DoLoadMultiAsync(paths, callback));
     }
 
+	/// <summary>
+	/// Dos the load multi async.
+	/// </summary>
+	/// <returns>The load multi async.</returns>
+	/// <param name="paths">Paths.</param>
+	/// <param name="callback">Callback.</param>
     private static IEnumerator DoLoadMultiAsync(string[] paths, System.Action<Object[]> callback)
     {
         Object[] results = new Object[paths.Length];
@@ -285,6 +346,12 @@ public static class XRes
         callback(results);
     }
 
+	/// <summary>
+	/// Loads the scene async.
+	/// </summary>
+	/// <returns>The scene async.</returns>
+	/// <param name="name">Name.</param>
+	/// <param name="callback">Callback.</param>
     public static Coroutine LoadSceneAsync(string name, System.Action<string> callback)
     {
         XAssetBundleFileSystem.instance.ReleaseSceneCachedBundleOnSceneSwitch();
@@ -295,6 +362,12 @@ public static class XRes
         return XCoroutine.Run(DoLoadSceneAsync(name, callback));
     }
 
+	/// <summary>
+	/// Dos the load scene async.
+	/// </summary>
+	/// <returns>The load scene async.</returns>
+	/// <param name="name">Name.</param>
+	/// <param name="callback">Callback.</param>
     private static IEnumerator DoLoadSceneAsync(string name, System.Action<string> callback)
     {
         yield return null;
@@ -335,26 +408,42 @@ public static class XRes
         callback(name);
     }
 
+	/// <summary>
+	/// Unload the specified path.
+	/// </summary>
+	/// <param name="path">Path.</param>
     public static bool Unload(string path)
     {
         return XAssetCache.instance.Unload(path.ToLower());
     }
 
+	/// <summary>
+	/// Unload the specified asset.
+	/// </summary>
+	/// <param name="asset">Asset.</param>
     public static bool Unload(Object asset)
     {
         return XAssetCache.instance.Unload(asset);
     }
 
+	/// <summary>
+	/// Unloads the unused assets.
+	/// </summary>
+	/// <returns>The unused assets.</returns>
     private static AsyncOperation UnloadUnusedAssets()
     {
-        if ((_cleanupTask == null) || _cleanupTask.isDone)
+        if ((cleanupTask == null) || cleanupTask.isDone)
         {
             GLog.Log("[XRes] Running cleanup task");
-            _cleanupTask = Resources.UnloadUnusedAssets();
+            cleanupTask = Resources.UnloadUnusedAssets();
         }
-        return _cleanupTask;
+        return cleanupTask;
     }
 
+	/// <summary>
+	/// Flushs all and unload.
+	/// </summary>
+	/// <returns>The all and unload.</returns>
     [DoNotToLua]
     public static AsyncOperation FlushAllAndUnload()
     {
@@ -362,12 +451,19 @@ public static class XRes
         return UnloadUnusedAssets();
     }
 
+	/// <summary>
+	/// Initialize this instance.
+	/// </summary>
     [DoNotToLua]
     public static IEnumerator Initialize()
     {
         yield return Initialize(null);
     }
 
+	/// <summary>
+	/// Initialize the specified progressCallback.
+	/// </summary>
+	/// <param name="progressCallback">Progress callback.</param>
     [DoNotToLua]
     public static IEnumerator Initialize(System.Action<XResUpdater.UpdateStage, float, string> progressCallback)
     {
@@ -395,6 +491,9 @@ public static class XRes
 #endif
     }
 
+	/// <summary>
+	/// Update this instance.
+	/// </summary>
     [DoNotToLua]
     public static void Update()
     {

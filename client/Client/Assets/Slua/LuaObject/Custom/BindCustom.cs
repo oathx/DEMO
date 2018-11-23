@@ -15,7 +15,6 @@ namespace SLua {
 				Lua_XTcpServer.reg,
 				Lua_UIEventTriggerListener.reg,
 				Lua_LuaBehaviourScript.reg,
-				Lua_XResourceManager.reg,
 				Lua_XRes.reg,
 				Lua_DissolveType.reg,
 				Lua_XShaderEffect.reg,

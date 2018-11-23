@@ -64,9 +64,23 @@ public class Lua_UnityEngine_Caching : LuaObject {
 	[UnityEngine.Scripting.Preserve]
 	static public int CleanCache_s(IntPtr l) {
 		try {
-			var ret=UnityEngine.Caching.CleanCache();
-			pushValue(l,true);
-			pushValue(l,ret);
+			int argc = LuaDLL.lua_gettop(l);
+			if(argc==0){
+				var ret=UnityEngine.Caching.CleanCache();
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			else if(argc==1){
+				System.Int32 a1;
+				checkType(l,1,out a1);
+				var ret=UnityEngine.Caching.CleanCache(a1);
+				pushValue(l,true);
+				pushValue(l,ret);
+				return 2;
+			}
+			pushValue(l,false);
+			LuaDLL.lua_pushstring(l,"No matched override function CleanCache to call");
 			return 2;
 		}
 		catch(Exception e) {

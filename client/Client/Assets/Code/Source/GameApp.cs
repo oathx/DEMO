@@ -65,31 +65,96 @@ public class GameApp : MonoBehaviour
 		LuaSvr.mainState.Dispose ();
 	}
 
-	/// <summary>
-	/// Loads the script.
-	/// </summary>
-	/// <returns>The script.</returns>
-	/// <param name="szPath">Size path.</param>
-	[DoNotToLua]
-	public static byte[] 		LoadScript(string szPath)
-	{
-		string szScriptPath = string.Format ("{0}/Code/Script/{1}.lua", Application.dataPath, szPath.Replace (".", "/"));
-		if (!File.Exists (szScriptPath))
-			throw new System.FieldAccessException (szScriptPath);
+    /// <summary>
+    /// 
+    /// </summary>
+    private static string platformPath = string.Empty;
 
-		#if UNITY_EDITOR
-		Debug.Log(string.Format("GameEngine load script =>> {0}", szPath));
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
+    public static string GetPlatformLuaBytesFloder()
+    {
+        switch (Application.platform)
+        {
+            case RuntimePlatform.IPhonePlayer:
+                {
+#if ENABLE_MONO
+                    return "iosv7";
+#else
+            string cpu = SystemInfo.processorType.ToLower();
+            if (cpu.Contains("arm64"))
+                return "ios64";
+            else
+                return "iosv7";
+#endif
+
+                }
+
+            case RuntimePlatform.OSXEditor:
+            case RuntimePlatform.OSXPlayer:
+                {
+                    return "osx";
+                }
+
+            default:
+                return "jitx86";
+        }
+    }
+
+	/// <summary>
+	/// Loads the bytes script.
+	/// </summary>
+	/// <returns>The bytes script.</returns>
+	/// <param name="fn">Fn.</param>
+	public static byte[]    LoadScript(string fn)
+    {
+        fn = fn.Replace(".", "/");
+        
+#if UNITY_STANDALONE || UNITY_EDITOR
+        BufferAsset asset = ScriptableObject.CreateInstance<BufferAsset>();
+
+        // find config source code
+        string filePath = System.IO.Path.Combine(Application.dataPath, string.Format("Config/{0}.lua", fn));
+        if (!System.IO.File.Exists(filePath))
+        {
+			// find logic script
+            filePath = System.IO.Path.Combine(Application.dataPath, string.Format("Code/Script/{0}.lua", fn));
+            if (!System.IO.File.Exists(filePath))
+            {
+				// find lua byte code
+				filePath = System.IO.Path.Combine(Application.dataPath, 
+					string.Format("Slua/jit/{0}/{1}.bytes", platformPath, fn));
+            }
+        }
+
+		#if !RELEASE
+		GLog.Log(string.Format("{0}", filePath));
 		#endif
 
-		FileStream stream = File.OpenRead (szScriptPath);
+        if (System.IO.File.Exists(filePath))
+        {
+            System.IO.FileStream fs = System.IO.File.OpenRead(filePath);
+            asset.init((int)fs.Length);
+            fs.Read(asset.bytes, 0, (int)fs.Length);
+            fs.Close();
+        }
+		else 
+		{
+			Debug.LogError("can't find file : " + filePath);
+		}
+#else
+        string hash = GUtility.Md5Sum(string.Format("{0}/{1}",
+			platformPath, bytefn));
 
-		// read lua file
-		byte[] byRead = new byte[stream.Length];
-		stream.Read (byRead, 0, (int)stream.Length);
-		stream.Close ();
+        BufferAsset asset =  LuaFilePicker.LoadLuaAsset(string.Format("files/{0}", hash));
+#endif
+        if (asset != null)
+            return asset.bytes;
 
-		return byRead;
-	}
+        return null;
+    }
 
 	/// <summary>
 	/// Inits the slua.
@@ -101,7 +166,9 @@ public class GameApp : MonoBehaviour
 	{
         luaServer = new LuaSvr();
 
-        LuaSvr.mainState.loaderDelegate = LoadScript;
+		platformPath = GetPlatformLuaBytesFloder ();
+		if (!string.IsNullOrEmpty(platformPath))
+			LuaSvr.mainState.loaderDelegate = LoadScript;
 
 		luaServer.init(progress, () => {
 #if !RELEASE

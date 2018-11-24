@@ -14,6 +14,9 @@ public class XProcessPack
     /// </summary>
     public static XProcessPack instance;
     
+	/// <summary>
+	/// Initializes the <see cref="XProcessPack"/> class.
+	/// </summary>
     static XProcessPack()
     {
         instance = new XProcessPack();

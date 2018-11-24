@@ -17,7 +17,7 @@ public static class XRes
 	/// </summary>
 	/// <returns>The coroutine.</returns>
 	/// <param name="em">Em.</param>
-    private static Coroutine StartCoroutine(IEnumerator em)
+    private static Coroutine 	StartCoroutine(IEnumerator em)
     {
         return XCoroutine.Run(em);
     }
@@ -26,7 +26,7 @@ public static class XRes
 	/// Find the specified path.
 	/// </summary>
 	/// <param name="path">Path.</param>
-    private static Object Find(string path)
+    private static Object 		Find(string path)
     {
         return null;
     }
@@ -37,7 +37,7 @@ public static class XRes
 	/// <param name="path">Path.</param>
 	/// <typeparam name="T">The 1st type parameter.</typeparam>
     [DoNotToLua]
-    public static T Load<T>(string path) where T : Object
+    public static T 			Load<T>(string path) where T : Object
     {
         return (Load(path, typeof(T)) as T);
     }
@@ -48,7 +48,7 @@ public static class XRes
 	/// <param name="path">Path.</param>
 	/// <param name="type">Type.</param>
     [DoNotToLua]
-    public static Object Load(string path, System.Type type)
+    public static Object 		Load(string path, System.Type type)
     {
         string name = path.ToLower();
         if (string.IsNullOrEmpty(path))
@@ -60,7 +60,7 @@ public static class XRes
         UnityEngine.Object obj = Find(name);
 
 #if UNITY_EDITOR
-        AssetBundleDependence.instance.BeginRecord(name);
+        XAssetBundleDependence.instance.BeginRecord(name);
 #endif
 
         if (obj == null)
@@ -150,7 +150,7 @@ public static class XRes
 	/// <param name="path">Path.</param>
 	/// <param name="callback">Callback.</param>
 	/// <typeparam name="T">The 1st type parameter.</typeparam>
-    public static Coroutine LoadAsync<T>(string path, System.Action<Object> callback) where T : Object
+    public static Coroutine		LoadAsync<T>(string path, System.Action<Object> callback) where T : Object
     {
         return LoadAsync(path, typeof(T), callback);
     }
@@ -162,7 +162,7 @@ public static class XRes
 	/// <param name="path">Path.</param>
 	/// <param name="type">Type.</param>
 	/// <param name="callback">Callback.</param>
-    public static Coroutine LoadAsync(string path, System.Type type, System.Action<Object> callback)
+    public static Coroutine 	LoadAsync(string path, System.Type type, System.Action<Object> callback)
     {
         return StartCoroutine(DoLoadAsync(path, type, callback));
     }
@@ -174,7 +174,7 @@ public static class XRes
 	/// <param name="path">Path.</param>
 	/// <param name="type">Type.</param>
 	/// <param name="callback">Callback.</param>
-    private static IEnumerator DoLoadAsync(string path, System.Type type, System.Action<Object> callback)
+    private static IEnumerator 	DoLoadAsync(string path, System.Type type, System.Action<Object> callback)
     {
         if (string.IsNullOrEmpty(path))
         {
@@ -188,7 +188,7 @@ public static class XRes
         {
             XAssetInfo info = XResourceIndexSheet.instance.Find(name);
 #if UNITY_EDITOR
-            StartCoroutine(AssetBundleDependence.instance.BeginRecordAsync(name));
+            StartCoroutine(XAssetBundleDependence.instance.BeginRecordAsync(name));
 #endif
             if (info != null)
             {
@@ -300,7 +300,7 @@ public static class XRes
 	/// <param name="type">Type.</param>
 	/// <param name="callback">Callback.</param>
 	/// <param name="param">Parameter.</param>
-    private static Coroutine LoadAsync(string path, System.Type type, System.Action<Object, int> callback, int param)
+    private static Coroutine 	LoadAsync(string path, System.Type type, System.Action<Object, int> callback, int param)
     {
         return StartCoroutine(DoLoadAsync(path, type, delegate(Object obj)
         {
@@ -314,7 +314,7 @@ public static class XRes
 	/// <returns>The multi async.</returns>
 	/// <param name="paths">Paths.</param>
 	/// <param name="callback">Callback.</param>
-    public static Coroutine LoadMultiAsync(string[] paths, System.Action<Object[]> callback)
+    public static Coroutine 	LoadMultiAsync(string[] paths, System.Action<Object[]> callback)
     {
         return StartCoroutine(DoLoadMultiAsync(paths, callback));
     }
@@ -325,7 +325,7 @@ public static class XRes
 	/// <returns>The load multi async.</returns>
 	/// <param name="paths">Paths.</param>
 	/// <param name="callback">Callback.</param>
-    private static IEnumerator DoLoadMultiAsync(string[] paths, System.Action<Object[]> callback)
+    private static IEnumerator 	DoLoadMultiAsync(string[] paths, System.Action<Object[]> callback)
     {
         Object[] results = new Object[paths.Length];
         bool[] loadDone = new bool[paths.Length];
@@ -352,7 +352,7 @@ public static class XRes
 	/// <returns>The scene async.</returns>
 	/// <param name="name">Name.</param>
 	/// <param name="callback">Callback.</param>
-    public static Coroutine LoadSceneAsync(string name, System.Action<string> callback)
+    public static Coroutine 	LoadSceneAsync(string name, System.Action<string> callback)
     {
         XAssetBundleFileSystem.instance.ReleaseSceneCachedBundleOnSceneSwitch();
 #if RECORD_FPS
@@ -368,7 +368,7 @@ public static class XRes
 	/// <returns>The load scene async.</returns>
 	/// <param name="name">Name.</param>
 	/// <param name="callback">Callback.</param>
-    private static IEnumerator DoLoadSceneAsync(string name, System.Action<string> callback)
+    private static IEnumerator 	DoLoadSceneAsync(string name, System.Action<string> callback)
     {
         yield return null;
 
@@ -377,7 +377,7 @@ public static class XRes
         XResScene info = XResourceIndexSheet.instance.GetScene(name);
 #if UNITY_EDITOR
         if (info != null)
-            StartCoroutine(AssetBundleDependence.instance.LoadSceneAsync(info));
+            StartCoroutine(XAssetBundleDependence.instance.LoadSceneAsync(info));
 
         if (XResourceIndexSheet.instance.isInit && XResourceIndexSheet.instance.isDependentRis)
         {

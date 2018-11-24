@@ -3,7 +3,7 @@ using System.Collections;
 
 public class XLuaFilePicker
 {
-    static LuaBigFileBufferAsset    asset;
+    static LuaBigFileBufferAsset asset;
 
     /// <summary>
     /// 
@@ -105,7 +105,7 @@ public class XLuaFilePicker
             bufferAsset = XRes.Load<BufferAsset>(fileName);
         }
 #else
-        //bufferAsset = XRes.Load<BufferAsset>(fileName);
+        bufferAsset = XRes.Load<BufferAsset>(fileName);
 #endif
 
         return bufferAsset;

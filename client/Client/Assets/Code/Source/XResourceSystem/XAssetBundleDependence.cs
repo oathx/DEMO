@@ -5,19 +5,29 @@ using System.IO;
 using UnityEngine.SceneManagement;
 using System.Text;
 
-public sealed class AssetBundleDependence
+/// <summary>
+/// Asset bundle dependence.
+/// </summary>
+public sealed class XAssetBundleDependence
 {
-    public static AssetBundleDependence instance { get; internal set; }
+    public static XAssetBundleDependence instance 
+	{ get; internal set; }
 
-    static AssetBundleDependence()
+	/// <summary>
+	/// Initializes the <see cref="AssetBundleDependence"/> class.
+	/// </summary>
+    static XAssetBundleDependence()
     {
-        instance = new AssetBundleDependence();
+        instance = new XAssetBundleDependence();
     }
 
 #if UNITY_EDITOR
     public Dictionary<string, int> 
         bundleNames = new Dictionary<string, int>();
     
+	/// <summary>
+	/// The is record.
+	/// </summary>
     private bool isRecord = false;
     private XAssetBundleFileSystem.AssetBundleInfo bundleInfo;
     private float bundleSize = 0;
@@ -25,26 +35,26 @@ public sealed class AssetBundleDependence
     /// <summary>
     /// 
     /// </summary>
-    public void BegainRecordBundleName()
+    public void 		BegainRecordBundleName()
     {
         bundleNames.Clear();
         isRecord = true;
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="flag"></param>
-    public void SetRecordFlag(bool flag = false)
+	/// <summary>
+	/// Sets the record flag.
+	/// </summary>
+	/// <param name="flag">If set to <c>true</c> flag.</param>
+    public void 		SetRecordFlag(bool flag = false)
     {
         isRecord = flag;
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <returns></returns>
-    public float GetBundleSize()
+	/// <summary>
+	/// Gets the size of the bundle.
+	/// </summary>
+	/// <returns>The bundle size.</returns>
+    public float 		GetBundleSize()
     {
         return bundleSize;
     }
@@ -52,7 +62,7 @@ public sealed class AssetBundleDependence
     /// <summary>
     /// 
     /// </summary>
-    public void ClearBundleSize()
+    public void 		ClearBundleSize()
     {
         bundleSize = 0;
     }
@@ -70,7 +80,7 @@ public sealed class AssetBundleDependence
     /// 
     /// </summary>
     /// <param name="name"></param>
-    public void BeginRecord(string name)
+    public void 		BeginRecord(string name)
     {
         if (XResourceIndexSheet.instance.isDependentRis)
         {
@@ -87,7 +97,7 @@ public sealed class AssetBundleDependence
     /// </summary>
     /// <param name="name"></param>
     /// <returns></returns>
-    public IEnumerator BeginRecordAsync(string name)
+    public IEnumerator 	BeginRecordAsync(string name)
     {
         if (XResourceIndexSheet.instance.isDependentRis)
         {
@@ -107,7 +117,7 @@ public sealed class AssetBundleDependence
     /// 
     /// </summary>
     /// <param name="info"></param>
-    public void LoadBundle(XAssetInfo info)
+    public void 		LoadBundle(XAssetInfo info)
     {
         bundleInfo = LoadAssetBundle(info.bundle);
         Debug.Log(info.bundle);
@@ -117,7 +127,7 @@ public sealed class AssetBundleDependence
     /// 
     /// </summary>
     /// <param name="pack"></param>
-    private void LoadDependencies(XResPack pack)
+    private void 		LoadDependencies(XResPack pack)
     {
         foreach (string dependence in pack.dependencies)
         {
@@ -152,8 +162,8 @@ public sealed class AssetBundleDependence
         }
 
         bundleSize += bundleInfo.pack.size;
-
         LoadDependencies(bundleInfo.pack);
+
         return bundleInfo;
     }
 
@@ -169,7 +179,9 @@ public sealed class AssetBundleDependence
         if (!bundleInfo.isDone)
         {
             needLoad = true;
-            yield return XCoroutine.Run(LoadAssetBundleAsyncCustom(bundleInfo));
+            yield return XCoroutine.Run(
+				LoadAssetBundleAsyncCustom(bundleInfo)
+			);
         }
     }
 
@@ -194,6 +206,7 @@ public sealed class AssetBundleDependence
                 bundleNames[bundleInfo.pack.name] = count;
             }
         }
+
         while (bundleInfo.isLoading)
             yield return null;
 
@@ -207,6 +220,7 @@ public sealed class AssetBundleDependence
                     bundleNames[bundleInfo.pack.name] = 1 + bundleNames[bundleInfo.pack.name];
             }
         }
+
         if (bundleInfo.isDone)
             yield break;
 
@@ -236,6 +250,7 @@ public sealed class AssetBundleDependence
                 bundleInfo.AddDepended(pack.name);
             }
         }
+
         for (int i = 0; i < pack.dependencies.Length; i++)
         {
             XAssetBundleFileSystem.AssetBundleInfo bundleInfo = XAssetBundleFileSystem.instance.GetAssetBundleInfo(pack.dependencies[i]);
@@ -262,7 +277,7 @@ public sealed class AssetBundleDependence
             else
                 yield return null;
         }
-        else
+        else 
             yield return null;
     }
 

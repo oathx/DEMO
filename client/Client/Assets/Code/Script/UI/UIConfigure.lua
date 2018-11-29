@@ -12,14 +12,14 @@ UIStyle = {
 
 -- game ui base config table
 UIConfigure = {
-	[UIStyle.LOGIN] 	= {ID=UIStyle.LOGIN, 	prefab="UI/UILogin", 	uiClass="UI/UILogin", 		active=true, async=true, 	cache=true},
-	[UIStyle.YES] 		= {ID=UIStyle.YES, 		prefab="UI/UIYes", 		uiClass="UI/UIYes", 		active=true, async=false, 	cache=true},
-	[UIStyle.YESNO] 	= {ID=UIStyle.YESNO, 	prefab="UI/UIYesNo", 	uiClass="UI/UIYesNo", 		active=true, async=false, 	cache=true},
-	[UIStyle.PROMPT] 	= {ID=UIStyle.PROMPT, 	prefab="UI/UIPrompt", 	uiClass="UI/UIPrompt", 		active=true, async=true, 	cache=false},
-	[UIStyle.ACCOUNT] 	= {ID=UIStyle.ACCOUNT,	prefab="UI/UIAccount", 	uiClass="UI/UIAccount", 	active=true, async=true, 	cache=true},
-	[UIStyle.LOADING] 	= {ID=UIStyle.LOADING,	prefab="UI/UILoading", 	uiClass="UI/UILoading", 	active=true, async=false, 	cache=true},
-	[UIStyle.MENU] 		= {ID=UIStyle.MENU,		prefab="UI/UIMenu", 	uiClass="UI/UIMenu", 		active=true, async=false, 	cache=true},
-	[UIStyle.TASK] 		= {ID=UIStyle.TASK,		prefab="UI/UITask", 	uiClass="UI/UITask", 		active=true, async=false, 	cache=true},
+	[UIStyle.LOGIN] 	= {ID=UIStyle.LOGIN, 	prefab="UI/UILogin", 	uiClass="UI/UILogin", 		active=true, async=true, 	cache=true, back=false},
+	[UIStyle.YES] 		= {ID=UIStyle.YES, 		prefab="UI/UIYes", 		uiClass="UI/UIYes", 		active=true, async=false, 	cache=true, back=false},
+	[UIStyle.YESNO] 	= {ID=UIStyle.YESNO, 	prefab="UI/UIYesNo", 	uiClass="UI/UIYesNo", 		active=true, async=false, 	cache=true, back=false},
+	[UIStyle.PROMPT] 	= {ID=UIStyle.PROMPT, 	prefab="UI/UIPrompt", 	uiClass="UI/UIPrompt", 		active=true, async=true, 	cache=false, back=false},
+	[UIStyle.ACCOUNT] 	= {ID=UIStyle.ACCOUNT,	prefab="UI/UIAccount", 	uiClass="UI/UIAccount", 	active=true, async=true, 	cache=true, back=false},
+	[UIStyle.LOADING] 	= {ID=UIStyle.LOADING,	prefab="UI/UILoading", 	uiClass="UI/UILoading", 	active=true, async=false, 	cache=true, back=false},
+	[UIStyle.MENU] 		= {ID=UIStyle.MENU,		prefab="UI/UIMenu", 	uiClass="UI/UIMenu", 		active=true, async=false, 	cache=true, back=false},
+	[UIStyle.TASK] 		= {ID=UIStyle.TASK,		prefab="UI/UITask", 	uiClass="UI/UITask", 		active=true, async=false, 	cache=true, back=false},
 }
 
 GuiEvent = {

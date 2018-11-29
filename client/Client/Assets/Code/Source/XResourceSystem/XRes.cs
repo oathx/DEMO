@@ -60,7 +60,7 @@ public static class XRes
         UnityEngine.Object obj = Find(name);
 
 #if UNITY_EDITOR
-        XAssetBundleDependence.instance.BeginRecord(name);
+        XAssetDependence.instance.BeginRecord(name);
 #endif
 
         if (obj == null)
@@ -188,7 +188,7 @@ public static class XRes
         {
             XAssetInfo info = XResourceIndexSheet.instance.Find(name);
 #if UNITY_EDITOR
-            StartCoroutine(XAssetBundleDependence.instance.BeginRecordAsync(name));
+            StartCoroutine(XAssetDependence.instance.BeginRecordAsync(name));
 #endif
             if (info != null)
             {
@@ -377,7 +377,7 @@ public static class XRes
         XResScene info = XResourceIndexSheet.instance.GetScene(name);
 #if UNITY_EDITOR
         if (info != null)
-            StartCoroutine(XAssetBundleDependence.instance.LoadSceneAsync(info));
+            StartCoroutine(XAssetDependence.instance.LoadSceneAsync(info));
 
         if (XResourceIndexSheet.instance.isInit && XResourceIndexSheet.instance.isDependentRis)
         {

@@ -72,6 +72,18 @@ function Close(self, complete)
 	end		
 end
 
+function Show(self)
+	if self.gameObject then
+		self.gameObject:SetActive(true)
+	end
+end
+
+function Hide(self)
+	if self.gameObject then
+		self.gameObject:SetActive(false)
+	end
+end
+
 function Reset(self)
 end
 

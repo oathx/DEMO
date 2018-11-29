@@ -6,19 +6,22 @@ using UnityEngine.SceneManagement;
 using System.Text;
 
 /// <summary>
-/// Asset bundle dependence.
+/// Asset dependence.
 /// </summary>
-public sealed class XAssetBundleDependence
+public sealed class XAssetDependence
 {
-    public static XAssetBundleDependence instance 
+    /// <summary>
+    /// 
+    /// </summary>
+    public static XAssetDependence instance 
 	{ get; internal set; }
 
 	/// <summary>
 	/// Initializes the <see cref="AssetBundleDependence"/> class.
 	/// </summary>
-    static XAssetBundleDependence()
+    static XAssetDependence()
     {
-        instance = new XAssetBundleDependence();
+        instance = new XAssetDependence();
     }
 
 #if UNITY_EDITOR
@@ -35,7 +38,7 @@ public sealed class XAssetBundleDependence
     /// <summary>
     /// 
     /// </summary>
-    public void 		BegainRecordBundleName()
+    public void 		            BegainRecordBundleName()
     {
         bundleNames.Clear();
         isRecord = true;
@@ -45,7 +48,7 @@ public sealed class XAssetBundleDependence
 	/// Sets the record flag.
 	/// </summary>
 	/// <param name="flag">If set to <c>true</c> flag.</param>
-    public void 		SetRecordFlag(bool flag = false)
+    public void 		            SetRecordFlag(bool flag = false)
     {
         isRecord = flag;
     }
@@ -54,7 +57,7 @@ public sealed class XAssetBundleDependence
 	/// Gets the size of the bundle.
 	/// </summary>
 	/// <returns>The bundle size.</returns>
-    public float 		GetBundleSize()
+    public float 		            GetBundleSize()
     {
         return bundleSize;
     }
@@ -62,7 +65,7 @@ public sealed class XAssetBundleDependence
     /// <summary>
     /// 
     /// </summary>
-    public void 		ClearBundleSize()
+    public void 		            ClearBundleSize()
     {
         bundleSize = 0;
     }
@@ -71,7 +74,7 @@ public sealed class XAssetBundleDependence
     /// 
     /// </summary>
     /// <returns></returns>
-    public Dictionary<string, int> GetBundleName()
+    public Dictionary<string, int>  GetBundleName()
     {
         return bundleNames;
     }
@@ -80,7 +83,7 @@ public sealed class XAssetBundleDependence
     /// 
     /// </summary>
     /// <param name="name"></param>
-    public void 		BeginRecord(string name)
+    public void 		            BeginRecord(string name)
     {
         if (XResourceIndexSheet.instance.isDependentRis)
         {
@@ -97,17 +100,25 @@ public sealed class XAssetBundleDependence
     /// </summary>
     /// <param name="name"></param>
     /// <returns></returns>
-    public IEnumerator 	BeginRecordAsync(string name)
+    public IEnumerator 	            BeginRecordAsync(string name)
     {
         if (XResourceIndexSheet.instance.isDependentRis)
         {
-            XAssetInfo index = null;
+            Dictionary<string, XAssetInfo> 
+                dict = XResourceIndexSheet.instance.GetFastIndex();
 
-            XResourceIndexSheet.instance.GetFastIndex().TryGetValue(name, out index);
-            if (index.location == Location.Bundle)
-                yield return XCoroutine.Run(LoadBundleAsync(index));
-            else
-                yield return null;
+            XAssetInfo index = null;
+            if (dict.TryGetValue(name, out index)) 
+            {
+                if (index.location == Location.Bundle)
+                {
+                    yield return XCoroutine.Run(LoadBundleAsync(index));
+                }
+                else
+                {
+                    yield return null;   
+                }   
+            }
         }
 
         yield return null;
@@ -117,17 +128,16 @@ public sealed class XAssetBundleDependence
     /// 
     /// </summary>
     /// <param name="info"></param>
-    public void 		LoadBundle(XAssetInfo info)
+    public void 		            LoadBundle(XAssetInfo info)
     {
         bundleInfo = LoadAssetBundle(info.bundle);
-        Debug.Log(info.bundle);
     }
 
     /// <summary>
     /// 
     /// </summary>
     /// <param name="pack"></param>
-    private void 		LoadDependencies(XResPack pack)
+    private void 		            LoadDependencies(XResPack pack)
     {
         foreach (string dependence in pack.dependencies)
         {
@@ -142,7 +152,8 @@ public sealed class XAssetBundleDependence
     /// </summary>
     /// <param name="bundleName"></param>
     /// <returns></returns>
-    private XAssetBundleFileSystem.AssetBundleInfo LoadAssetBundle(string bundleName)
+    private XAssetBundleFileSystem.AssetBundleInfo 
+        LoadAssetBundle(string bundleName)
     {
         XAssetBundleFileSystem.AssetBundleInfo bundleInfo = XAssetBundleFileSystem.instance.GetAssetBundleInfo(bundleName);
         if (bundleInfo == null)
@@ -179,6 +190,7 @@ public sealed class XAssetBundleDependence
         if (!bundleInfo.isDone)
         {
             needLoad = true;
+
             yield return XCoroutine.Run(
 				LoadAssetBundleAsyncCustom(bundleInfo)
 			);

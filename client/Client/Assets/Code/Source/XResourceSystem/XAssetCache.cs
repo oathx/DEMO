@@ -29,7 +29,8 @@ public sealed class XAssetCache
     /// <summary>
     /// 
     /// </summary>
-    public static XAssetCache instance { get; internal set; }
+    public static XAssetCache instance 
+    { get; internal set; }
 
 
     /// <summary>

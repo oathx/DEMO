@@ -5,14 +5,20 @@ using System.IO;
 using ICSharpCode.SharpZipLib.Zip;
 using SevenZip.Compression.LZMA;
 
+/// <summary>
+/// 
+/// </summary>
 public class XProcessPack
 {
-    public static string OutCachePath;
+    /// <summary>
+    /// 
+    /// </summary>
+    public static string        OutCachePath;
 
     /// <summary>
     /// 
     /// </summary>
-    public static XProcessPack instance;
+    public static XProcessPack  instance;
     
 	/// <summary>
 	/// Initializes the <see cref="XProcessPack"/> class.
@@ -22,9 +28,9 @@ public class XProcessPack
         instance = new XProcessPack();
 
         #if UNITY_ANDROID && !UNITY_EDITOR
-			OutCachePath = Path.Combine(Application.persistentDataPath, "act_cache");
+			OutCachePath = Path.Combine(Application.persistentDataPath, "xris_cache");
         #else
-			OutCachePath = Path.Combine(Application.temporaryCachePath, "act_cache");
+            OutCachePath = Path.Combine(Application.temporaryCachePath, "xris_cache");
         #endif
 
         try

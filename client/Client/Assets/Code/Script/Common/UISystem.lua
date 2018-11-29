@@ -3,7 +3,7 @@ setmetatable(UISystem, {__index=LuaBehaviour})
 
 function Init(self)
 	self.widgets 	= {}
-	self.cacheQueue = {}
+	self.backQueue	= {}
 end
 
 function Startup(self)
@@ -168,10 +168,6 @@ function UnloadWidget(self, szModule, complete)
 
 			PluginManager.GetSingleton():FireEvent(GuiEvent.EVT_CLOSED, evtArgs)
 
-			if setting.cache then
-				table.insert(self.cacheQueue, setting.ID)
-			end
-
 			if complete then
 				complete()
 			end
@@ -236,9 +232,32 @@ end
 
 function CloseWidget(self, style, complete)
     local set = UIConfigure[style]
-    if set then
+	if set then
+		if setting.back then
+			table.insert(self.backQueue, setting.ID)
+		end
+
     	self:UnloadWidget(set.uiClass, complete)    
     end
+end
+
+function ReturnWidget(self, complete)
+	local count = #self.backQueue
+	if count > 0 then
+		local wid = self.backQueue[count] or -1
+		if wid >= 0 then
+			local setting = UIConfigure[wid]
+			if setting then
+				self:OpenWidget(wid, function(widget) 
+					table.remove(self.backQueue, count)
+
+					if complete then
+						complete(widget)
+					end
+				end)
+			end
+		end
+	end
 end
 
 function MessageBox(self, style, text, callback, args)

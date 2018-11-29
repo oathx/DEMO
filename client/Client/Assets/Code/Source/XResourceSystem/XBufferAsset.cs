@@ -6,25 +6,43 @@ using System.Collections;
 /// </summary>
 public class BufferAsset : ScriptableObject
 {
-    private byte[] buffer;
+    /// <summary>
+    /// 
+    /// </summary>
+    private byte[]      buffer;
 
-    public byte[] bytes
+    /// <summary>
+    /// 
+    /// </summary>
+    public byte[]       bytes
     {
         get { return buffer; }
     }
 
-    public void init(int length)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="length"></param>
+    public void         init(int length)
     {
         buffer = new byte[length];
     }
 
-    public void init(TextAsset text)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="text"></param>
+    public void         init(TextAsset text)
     {
         if (text != null)
             buffer = text.bytes;
     }
 
-    public void init(byte[] bytes)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="bytes"></param>
+    public void         init(byte[] bytes)
     {
         buffer = bytes;
     }

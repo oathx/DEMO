@@ -107,3 +107,7 @@ function FireEvent(self, nID, evtArgs)
 		end
 	end
 end
+
+function PostEvent(self)
+	
+end

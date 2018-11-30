@@ -3,7 +3,9 @@ setmetatable(UISystem, {__index=LuaBehaviour})
 
 function Init(self)
 	self.widgets 	= {}
-	self.backQueue	= {}
+	self.cacheQueue	= {}
+	self.uiWidth = 1334
+	self.uiHeight = 750
 end
 
 function Startup(self)
@@ -15,6 +17,8 @@ end
 
 function Awake(self)
 	self.uiCamera 		= GameObject("UICamera")
+	self.bgCamera 		= GameObject("BGCamera")
+	self.bgCanvasObject	= GameObject("BgCanvas")
 	self.canvasObject	= GameObject("Canvas")
 	self.eventSystem	= GameObject("EventSystem")
 end
@@ -31,12 +35,36 @@ function Start(self)
 		go.layer 			= LayerMask.NameToLayer("UI")
 		go.transform.parent = self.transform
 	end
+
+	local bgTrans = {
+		self.bgCamera, self.bgCanvasObject
+	}
+	for idx, go in ipairs(bgTrans) do
+		go.layer 			= LayerMask.NameToLayer("BGUI")
+		go.transform.parent = self.transform
+	end
 	
 	self.eventSystem:AddComponent(EventSystem)
 	if _EDITOR then
 		self.eventSystem:AddComponent(StandaloneInputModule)
 	else
 		self.eventSystem:AddComponent(TouchInputModule)
+	end
+
+	self.bgCanvas = self.bgCanvasObject:AddComponent(Canvas)
+	if self.bgCanvas then
+		local bgScaler = self.bgCanvasObject:AddComponent(CanvasScaler)
+		bgScaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize
+		bgScaler.referenceResolution = Vector2(self.uiWidth, self.uiHeight)
+		bgScaler.screenMatchMode = CanvasScaler.ScreenMatchMode.Expand
+
+		self.bguiCamera = self.bgCamera:AddComponent(Camera)
+		self.bguiCamera.cullingMask = bit.lshift(1, LayerMask.NameToLayer("BGUI"))
+		self.bguiCamera.depth 		= 65535
+		self.bguiCamera.clearFlags 	= CameraClearFlags.Depth
+		
+		self.bgCanvas.worldCamera = self.bguiCamera
+		self.bgCanvas.renderMode = RenderMode.ScreenSpaceCamera
 	end
 	
 	self.canvas = self.canvasObject:AddComponent(Canvas)
@@ -56,8 +84,9 @@ function Start(self)
 	self.raycaster 		= self.canvasObject:AddComponent(GraphicRaycaster)
 	self.canvasScaler	= self.canvasObject:AddComponent(CanvasScaler)
 	if self.canvasScaler then
-		self.canvasScaler.uiScaleMode = ScaleMode.ScaleAndCrop
-		self.canvasScaler.referenceResolution = Vector2(800, 600)
+		self.canvasScaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize
+		self.canvasScaler.referenceResolution = Vector2(self.uiWidth, self.uiHeight)
+		self.canvasScaler.screenMatchMode = CanvasScaler.ScreenMatchMode.Expand
 	end
 end
 
@@ -233,31 +262,12 @@ end
 function CloseWidget(self, style, complete)
     local set = UIConfigure[style]
 	if set then
-		if setting.back then
-			table.insert(self.backQueue, setting.ID)
+		if set.cache then
+			table.insert(self.cacheQueue, set.ID)
 		end
 
     	self:UnloadWidget(set.uiClass, complete)    
     end
-end
-
-function ReturnWidget(self, complete)
-	local count = #self.backQueue
-	if count > 0 then
-		local wid = self.backQueue[count] or -1
-		if wid >= 0 then
-			local setting = UIConfigure[wid]
-			if setting then
-				self:OpenWidget(wid, function(widget) 
-					table.remove(self.backQueue, count)
-
-					if complete then
-						complete(widget)
-					end
-				end)
-			end
-		end
-	end
 end
 
 function MessageBox(self, style, text, callback, args)

@@ -121,7 +121,12 @@ function OnWindowClosed(self, evtArgs)
 
 		local dispatcher = self:GetDispatcher()
 		if dispatcher then
-			dispatcher:Back()
+			local system = dispatcher:Back()
+			if system then
+				INFO("OnWindowClosed id=%d classname=%s", cfg.ID, cfg.uiClass)
+			else
+
+			end
 		end
 	end
 

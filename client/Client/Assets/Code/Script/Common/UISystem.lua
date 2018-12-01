@@ -19,7 +19,7 @@ function Awake(self)
 	self.uiCamera 		= GameObject("UICamera")
 	self.bgCamera 		= GameObject("BGCamera")
 	self.bgCanvasObject	= GameObject("BgCanvas")
-	self.backRawImage 	= GameObject("backRawImage")
+	self.background 	= GameObject("background")
 	self.canvasObject	= GameObject("Canvas")
 	self.eventSystem	= GameObject("EventSystem")
 end
@@ -66,6 +66,20 @@ function Start(self)
 		
 		self.bgCanvas.worldCamera = self.bguiCamera
 		self.bgCanvas.renderMode = RenderMode.ScreenSpaceCamera
+
+		self.backRect = self.background.gameObject:AddComponent(RectTransform)
+		if self.backRect then
+			self.background.gameObject.transform:SetParent(self.bgCanvasObject.gameObject.transform, false)
+			self.backRect.anchorMax = Vector2(1, 1)
+			self.backRect.anchorMin = Vector2(0, 0)
+			self.backRect.offsetMax = Vector2(0, 0)
+			self.backRect.offsetMin = Vector2(0, 0)
+
+			self.backRaw = self.background.gameObject:AddComponent(RawImage)
+			if self.backRaw then
+				self.backRaw.color = Color.black
+			end
+		end
 	end
 	
 	self.canvas = self.canvasObject:AddComponent(Canvas)

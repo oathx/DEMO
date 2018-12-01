@@ -19,6 +19,7 @@ function Awake(self)
 	self.uiCamera 		= GameObject("UICamera")
 	self.bgCamera 		= GameObject("BGCamera")
 	self.bgCanvasObject	= GameObject("BgCanvas")
+	self.backRawImage 	= GameObject("backRawImage")
 	self.canvasObject	= GameObject("Canvas")
 	self.eventSystem	= GameObject("EventSystem")
 end

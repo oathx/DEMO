@@ -7,7 +7,8 @@ UIStyle = {
 	ACCOUNT = 4,
 	LOADING = 5,
 	MENU = 6,
-	TASK = 7
+	TASK = 7,
+	BACKGROUND = 8,
 }
 
 -- game ui base config table
@@ -20,6 +21,7 @@ UIConfigure = {
 	[UIStyle.LOADING] 	= {ID=UIStyle.LOADING,	prefab="UI/UILoading", 	uiClass="UI/UILoading", 	active=true, async=false, 	cache=true, back=false},
 	[UIStyle.MENU] 		= {ID=UIStyle.MENU,		prefab="UI/UIMenu", 	uiClass="UI/UIMenu", 		active=true, async=false, 	cache=true, back=false},
 	[UIStyle.TASK] 		= {ID=UIStyle.TASK,		prefab="UI/UITask", 	uiClass="UI/UITask", 		active=true, async=false, 	cache=true, back=false},
+	[UIStyle.BACKGROUND]= {ID=UIStyle.BACKGROUND,prefab="UI/UIBackground",uiClass="UI/UIBackground", active=true, async=false, 	cache=true, back=false},
 }
 
 GuiEvent = {

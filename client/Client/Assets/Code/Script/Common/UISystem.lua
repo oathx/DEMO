@@ -12,6 +12,9 @@ function Startup(self)
 	self.gameObject = GameObject("UI")
 	self:AddLuaBehaviour(self.gameObject)
 
+	self.gameObject.layer = LayerMask.NameToLayer("UI")
+	GameObject.DontDestroyOnLoad(self.gameObject)
+	
 	return true
 end
 
@@ -25,9 +28,6 @@ function Awake(self)
 end
 
 function Start(self)
-	self.gameObject.layer = LayerMask.NameToLayer("UI")
-	GameObject.DontDestroyOnLoad(self.gameObject)
-	
 	local aryTrans = {
 		self.uiCamera, self.canvasObject, self.eventSystem
 	}

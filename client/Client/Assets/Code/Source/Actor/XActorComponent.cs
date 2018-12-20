@@ -298,7 +298,8 @@ public class XActorComponent : MonoBehaviour
     /// <param name="clip"></param>
     public virtual void     SetAnimatorOverrideAnimation(string name, AnimationClip clip)
     {
-        if (animator == null) return;
+        if (!animator) 
+            return;
 
         AnimatorOverrideController controller = animator.runtimeAnimatorController as AnimatorOverrideController;
         if (controller != null && clip != null)
@@ -318,7 +319,8 @@ public class XActorComponent : MonoBehaviour
     /// <param name="clip"></param>
     public virtual void     SetAnimatorOverrideAnimation(string name, string clip)
     {
-        if (animator == null) return;
+        if (!animator) 
+            return;
 
         AnimatorOverrideController controller = animator.runtimeAnimatorController as AnimatorOverrideController;
         if (controller != null && !string.IsNullOrEmpty(clip))
@@ -337,7 +339,8 @@ public class XActorComponent : MonoBehaviour
     /// <param name="name"></param>
     public void             RevertOverrideAnimation(string name)
     {
-        if (animator == null) return;
+        if (!animator) 
+            return;
 
         AnimationClip clip = null;
         overridedAnimation.TryGetValue(name, out clip);
@@ -358,7 +361,7 @@ public class XActorComponent : MonoBehaviour
     /// <returns></returns>
     public virtual AnimatorStateInfo GetCurrentAnimatorState()
     {
-        if (animator != null)
+        if (animator)
         {
             if (animator.IsInTransition(0))
                 return animator.GetNextAnimatorStateInfo(0);

@@ -5,6 +5,9 @@ namespace SLua {
 	public class BindCustom {
 		public static Action<IntPtr>[] GetBindList() {
 			Action<IntPtr>[] list= {
+				Lua_XActorComponent.reg,
+				Lua_XActorComponent_BoneNogType.reg,
+				Lua_XActorComponent_BoneNogPoint.reg,
 				Lua_GUtility.reg,
 				Lua_GameApp.reg,
 				Lua_PacketType.reg,
@@ -14,7 +17,11 @@ namespace SLua {
 				Lua_TcpServerConfig.reg,
 				Lua_XTcpServer.reg,
 				Lua_UIEventTriggerListener.reg,
+				Lua_XBox2DComponent.reg,
+				Lua_XBox2DFlexibleHurt.reg,
+				Lua_XBox2DSystem.reg,
 				Lua_LuaBehaviourScript.reg,
+				Lua_XPrefs.reg,
 				Lua_XRes.reg,
 				Lua_DissolveType.reg,
 				Lua_XShaderEffect.reg,

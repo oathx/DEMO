@@ -55,7 +55,6 @@ public class Lua_XRes : LuaObject {
 			return error(l,e);
 		}
 	}
-
 	[SLua.MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	[UnityEngine.Scripting.Preserve]
 	static public int LoadSceneAsync_s(IntPtr l) {

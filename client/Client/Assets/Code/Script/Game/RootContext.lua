@@ -28,6 +28,9 @@ end
 
 function Startup(self)
 	Rpc:Init(Protocol.new())
+
+	-- start game manager
+	
 	
 	-- load system config
 	local sys = resmng.propLocalById(resmng.GAME_LOCAL)
@@ -42,9 +45,7 @@ function Startup(self)
 	-- load game default plugin
 	local result = UISystem.GetSingleton():Startup()
 	if result then
-		self:LoadScene(resmng.SCENE_LOGIN, function(name, plugin) 
-			
-		end)
+		GameManager.GetSingleton():Startup()
 	end
 end
 

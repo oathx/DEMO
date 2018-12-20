@@ -18,6 +18,7 @@ require("Common/PluginManager")
 require("Common/UIWidget")
 require("Common/UISystem")
 require("Common/BaseModel")
+require("Common/BaseStateMachine")
 
 -- require ui lib
 require("UI/UIConfigure")
@@ -44,3 +45,4 @@ require("Game/System/MenuSystem")
 require("Game/System/TaskSystem")
 --require("Game/System/FightSystem")
 require("Game/RootContext")
+require("Game/GameManager")

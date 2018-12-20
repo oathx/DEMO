@@ -21,14 +21,14 @@ function Startup(self)
 	return true
 end
 
-function LoadPlugin(self, szPluginPath)
-	local name = GetFileName(szPluginPath)
+function LoadPluginPath(self, path)
+	local name = GetFileName(path)
 
 	local plugin = self.plugins[name]
 	if not plugin then
-		local mod = require(szPluginPath)
+		local mod = require(path)
 		if not mod then
-			ERROR("Can't find plugin %s", szPluginPath)
+			ERROR("Can't find plugin %s", path)
 		end
 
 		plugin = _G[name].new(name)
@@ -40,12 +40,38 @@ function LoadPlugin(self, szPluginPath)
 			plugin:Install()
 		end
 
-		INFO("Load plugin %s", szPluginPath)
+		INFO("Load plugin %s", path)
 
 		self.plugins[name] = plugin
 	end
 
 	return plugin
+end
+
+function LoadPlugin(self, plugin)
+	if type(plugin) == "string" then
+		return self:LoadPluginPath(plugin)
+	end
+	
+	-- create new plugin
+	if plugin then
+		local name = plugin._NAME
+		local plg = self.plugins[name]
+		if not plg then
+			plg = plugin.new(name)
+			if plg.transform then
+				plg.transform.parent = self.transform
+			end
+
+			plg:Install()
+
+			INFO("Load plugin %s", name)
+
+			self.plugins[name] = plg		
+		end
+
+		return plg
+	end
 end
 
 function QueryPlugin(self, szPluginPath)

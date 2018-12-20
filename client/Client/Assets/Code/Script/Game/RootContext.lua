@@ -38,7 +38,7 @@ function Startup(self)
 		ELOG("Can't find system config")
 	else
 		if sys.MainLogicScriptPath then
-			self.systemPlugin = PluginManager.GetSingleton():LoadPlugin(sys.MainLogicScriptPath)
+			self.systemPlugin = PluginManager.GetSingleton():LoadPlugin(SystemPlugin)
 		end
 	end
 

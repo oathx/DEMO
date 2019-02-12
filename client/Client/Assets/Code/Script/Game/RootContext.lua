@@ -29,9 +29,6 @@ end
 function Startup(self)
 	Rpc:Init(Protocol.new())
 
-	-- start game manager
-	
-	
 	-- load system config
 	local sys = resmng.propLocalById(resmng.GAME_LOCAL)
 	if not sys then

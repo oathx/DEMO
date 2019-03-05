@@ -54,6 +54,11 @@ function DestroyMenuModelShape(self)
 end
 
 function Active(self)
+	local mgr = GameManager.GetSingleton()
+	if mgr then
+		mgr:PushState(resmng.GMS_MAIN)
+	end
+
 	UISystem.GetSingleton():OpenWidget(UIStyle.MENU, function(widget)
 		self.uiMenu = widget
 
@@ -76,6 +81,11 @@ function Active(self)
 end
 
 function Detive(self)
+	local mgr = GameManager.GetSingleton()
+	if mgr then
+		mgr:PopState(resmng.GMS_MAIN)
+	end
+
 	self:DestroyMenuModelShape()
 
 	UISystem.GetSingleton():CloseWidget(UIStyle.MENU, function() 

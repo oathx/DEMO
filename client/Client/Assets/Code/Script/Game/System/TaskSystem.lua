@@ -27,6 +27,11 @@ function Init(self, szName)
 end
 
 function Active(self)
+	local mgr = GameManager.GetSingleton()
+	if mgr then
+		mgr:SetState(resmng.GMS_TASK)
+	end
+
 	UISystem.GetSingleton():OpenWidget(UIStyle.TASK, function(widget)
 		self.uiTask = widget
 	end)
@@ -52,7 +57,12 @@ function OnExecuteTask(self, args)
 		if disptacher then
 			disptacher:Unload(self:Name())
 		end	
-	
+
+		local mgr = GameManager.GetSingleton()
+		if mgr then
+			mgr:SetState(resmng.GMS_FIGHT)
+		end
+
 		RootContext.GetSingleton():LoadScene(sceneID, function(name, plugin)
 
 		end)

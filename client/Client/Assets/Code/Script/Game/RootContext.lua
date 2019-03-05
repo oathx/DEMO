@@ -18,9 +18,9 @@ function Init(self)
 			return PlayerEntity.new(id)
 		end,
 
-		--[resmng.SYS_FIGHT] = function(id)
-		--	return FightSystemEntity.new(id)
-		--end
+		[resmng.SYS_FIGHT] = function(id)
+			return FightSystemEntity.new(id)
+		end
 	})
 
 	PluginManager.GetSingleton():Startup()
@@ -41,8 +41,12 @@ function Startup(self)
 
 	-- load game default plugin
 	local result = UISystem.GetSingleton():Startup()
-	if result then
+	if result then	
 		GameManager.GetSingleton():Startup()
+
+		-- load login scene
+	    self:LoadScene(resmng.SCENE_LOGIN, function(name, plugin)
+		end)		
 	end
 end
 
@@ -59,7 +63,7 @@ function LoadScene(self, nSceneID, complete)
 		else	
 			XRes.LoadSceneAsync(prop.Path, function(name)
 				UISystem.GetSingleton():CloseWidget(UIStyle.LOADING)
-				
+
 				local obser
 				local modID = prop.Script or 0
 

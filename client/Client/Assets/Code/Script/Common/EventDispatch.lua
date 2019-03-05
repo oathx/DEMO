@@ -35,7 +35,7 @@ function Load(self, szPath, active)
 			if not mod then
 				ERROR("Can't find observer script %s active=%s", szPath, tostring(active))
 			end
-
+		
 			observer = _G[name].new(name)
 			if observer then
 				self:Register(observer, active)

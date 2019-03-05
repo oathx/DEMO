@@ -48,7 +48,6 @@ function OnLoginEvent(self, evtArgs)
 			XTcpServer.GetSingleton():Connect()
 
 			self.checkTimerID = LuaTimer.Add(1000, function()
-				ELOG("OnLoginEvent")
 				Rpc:checkIn({
 						userName = evtArgs.UserName,
 						password = evtArgs.Password
@@ -84,7 +83,9 @@ function OnCheckIn(self, evtArgs)
 		disptacher:Unload(self:Name())
 	end
 
-	GameManager.GetSingleton():SetState(resmng.GMS_MAIN)
+	RootContext.GetSingleton():LoadScene(resmng.SCENE_MENU, function(name, plugin) 
+		
+	end)
 
 	return true
 end

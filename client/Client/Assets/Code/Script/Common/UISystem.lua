@@ -239,6 +239,12 @@ function Shutdown(self)
 	self:Clearup()
 end
 
+function Background(self, show)
+	if self.background then
+		self.background.gameObject:SetActive(show)
+	end
+end
+
 function OpenWidget(self, style, complete)
 	local setting = UIConfigure[style]
 	if not setting then

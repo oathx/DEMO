@@ -72,8 +72,13 @@ function LoadScene(self, nSceneID, complete)
 					if pob then
 						obser = self.systemPlugin:Load(pob.Path, pob.Active ~= 0)
 					end
+
+					-- notify system plugin scene load complete
+					self.systemPlugin:SendEvent(resmng.SYS_EVT_SCENECOMPLETE, {
+							scene = prop
+						})
 				end
-				
+
 				if complete then
 					complete(name, obser)
 				end
